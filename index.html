@@ -2,139 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Wingo Big/Small Color Game</title>
+  <title>🔥 पंकज AI Predictor - Auto Live Mode</title>
   <style>
     body {
-      background: #0a0a0a;
-      color: white;
+      background: #000;
+      color: #fff;
       font-family: Arial, sans-serif;
       text-align: center;
-      padding: 20px;
+      padding: 30px;
     }
 
-    h1 {
-      color: #00e6e6;
+    .box {
+      background: #111;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px #0ff;
+      max-width: 450px;
+      margin: auto;
     }
 
-    .buttons, .bigsmall {
-      margin: 20px 0;
-    }
-
-    button {
-      padding: 12px 20px;
-      margin: 8px;
-      font-size: 18px;
-      border: none;
+    input, button {
+      padding: 12px;
       border-radius: 10px;
-      cursor: pointer;
+      margin: 10px;
+      width: 80%;
+      border: none;
+      font-size: 16px;
     }
 
-    .red { background: red; color: white; }
-    .green { background: green; color: white; }
-    .violet { background: violet; color: white; }
-    .big { background: orange; }
-    .small { background: skyblue; }
-
-    .result, .score, .timer {
+    #result {
       margin-top: 20px;
       font-size: 20px;
+      font-weight: bold;
+      line-height: 1.5;
     }
 
-    .number-show {
-      font-size: 32px;
-      margin-top: 10px;
+    .live {
       color: yellow;
     }
   </style>
 </head>
 <body>
 
-  <h1>BDG Wingo Color + Big/Small Game (Demo)</h1>
-
-  <div class="buttons">
-    <button class="red" onclick="setColor('Red')">Red</button>
-    <button class="green" onclick="setColor('Green')">Green</button>
-    <button class="violet" onclick="setColor('Violet')">Violet</button>
+  <div class="box">
+    <h2>🧠 पंकज AI Predictor (Auto + API)</h2>
+    <p>Last Period: <span id="livePeriod">⏳ Loading...</span></p>
+    <div id="result">Prediction will appear here every 60seconds...</div>
   </div>
-
-  <div class="bigsmall">
-    <button class="big" onclick="setSize('Big')">Big</button>
-    <button class="small" onclick="setSize('Small')">Small</button>
-  </div>
-
-  <div class="number-show" id="numberShow">Waiting...</div>
-  <div class="result" id="result">Make your prediction</div>
-  <div class="score" id="score">Score: 0</div>
-  <div class="timer" id="timer">Next round in: 10s</div>
 
   <script>
-    let chosenColor = null;
-    let chosenSize = null;
-    let score = 0;
-    let timer = 10;
+    const API_URL = "https://api.example.com/latest"; // 🔁 YOUR API HERE
 
-    function setColor(color) {
-      chosenColor = color;
-      updateStatus();
+    function fetchLivePeriodAndPredict() {
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          const period = data?.period || "000000";  // Use correct path based on API
+          document.getElementById("livePeriod").innerText = period;
+          runPrediction(period);
+        })
+        .catch(err => {
+          document.getElementById("livePeriod").innerText = "⚠️ API Error";
+          document.getElementById("result").innerHTML = `<span style='color:red'>Failed to load API result</span>`;
+        });
     }
 
-    function setSize(size) {
-      chosenSize = size;
-      updateStatus();
-    }
+    function runPrediction(period) {
+      const resultBox = document.getElementById("result");
 
-    function updateStatus() {
-      document.getElementById('result').textContent =
-        `Prediction: ${chosenColor || 'None'} & ${chosenSize || 'None'}`;
-    }
-
-    function getColor(number) {
-      if (number === 0 || number === 5) return "Violet";
-      return number % 2 === 0 ? "Green" : "Red";
-    }
-
-    function getSize(number) {
-      return number < 5 ? "Small" : "Big";
-    }
-
-    function playRound() {
-      const number = Math.floor(Math.random() * 10);
-      const color = getColor(number);
-      const size = getSize(number);
-
-      document.getElementById('numberShow').textContent = `Number: ${number}`;
-      let resultMsg = `Color: ${color}, Size: ${size} — `;
-
-      let win = false;
-      if (chosenColor === color) {
-        score += 10;
-        resultMsg += "✅ Color match! ";
-        win = true;
-      }
-      if (chosenSize === size) {
-     
-        resultMsg += "✅ Size match!";
-        win = true;
-      }
-      if (!win) {
-        resultMsg += "
+      if (!/^\d{6,}$/.test(period)) {
+        resultBox.innerHTML = "<span style='color:red'>Invalid period number from API</span>";
+        return;
       }
 
-      document.getElementById('result').textContent = resultMsg;
-      document.getElementById('score').textContent = `Score: ${score}`;
-      chosenColor = null;
-      chosenSize = null;
+      const last = parseInt(period.slice(-1));
+      const last2 = parseInt(period.slice(-2));
+      const last3 = parseInt(period.slice(-3));
+      const digits = period.split('').map(Number);
+
+      let score = 0;
+
+      if (last % 2 === 0) score++;
+      if (last > 5) score++;
+      if (last2 % 3 === 0) score++;
+      if (last2 % 10 > 4) score++;
+      if (last3 % 7 < 4) score++;
+      if (last3 % 2 === 1) score++;
+
+      const sum = digits.reduce((a, b) => a + b, 0);
+      if (sum % 5 === 0) score++;
+      if (sum > 25) score++;
+
+      const prediction = score >= 5 ? "BIG" : "SMALL";
+      const confidence = Math.min(95 + score, 100);
+
+      resultBox.innerHTML = `
+        🕒 Auto Prediction: <span class='live'>${prediction}</span><br>
+        🔐 Confidence: ${confidence}%<br>
+        📊 Smart Score: ${score}/8
+      `;
     }
 
-    setInterval(() => {
-      if (timer > 0) {
-        document.getElementById('timer').textContent = `Next round in: ${timer}s`;
-        timer--;
-      } else {
-        playRound();
-        timer = 60;
-      }
-    }, 1000);
+    fetchLivePeriodAndPredict(); // Initial call
+    setInterval(fetchLivePeriodAndPredict, 60000); // Every 60 seconds
   </script>
 
 </body>
