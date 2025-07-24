@@ -1,0 +1,52 @@
+<button style="display: none;" onclick="toggleTimerBox30()">Start Hack (30s)</button><div id="timerBox30" style="display:none;">
+  <button id="closeButton30" onclick="toggleTimerBox30()">X</button>
+  <h3>VIP PANEL - 30s</h3>
+  <div id="period30s"></div>
+  <div id="timer30s"></div>
+  <div id="randomWord30"></div>
+</div>let timerInterval30 = null;
+function toggleTimerBox30() {
+    const timerBox = document.getElementById('timerBox30');
+    if (timerBox.style.display === 'none') {
+        timerBox.style.display = 'block';
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const boxWidth = timerBox.offsetWidth;
+        const boxHeight = timerBox.offsetHeight;
+        currentX = (windowWidth - boxWidth) / 2;
+        currentY = (windowHeight - boxHeight) / 2;
+        timerBox.style.left = currentX + 'px';
+        timerBox.style.top = currentY + 'px';
+        if (!timerInterval30) startTimer30();
+    } else {
+        timerBox.style.display = 'none';
+    }
+}function startTimer30() {
+    let lastHalfMinute = -1;
+    timerInterval30 = setInterval(() => {
+        const now = new Date();
+        const seconds = now.getUTCSeconds();
+        const half = Math.floor(seconds / 30);
+        const remainingSeconds = 30 - (seconds % 30);
+        const minutes = now.getUTCMinutes();
+        const hours = now.getUTCHours();
+        const total30sPeriods = hours * 2 * 60 + minutes * 2 + half;
+
+        if ((seconds % 30 === 0) && lastHalfMinute !== half) {
+            const words = ['Big', 'Small'];
+            document.getElementById('randomWord30').textContent = words[Math.floor(Math.random() * 2)];
+            lastHalfMinute = half;
+        }
+
+        const year = now.getUTCFullYear();
+        const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(now.getUTCDate()).padStart(2, '0');
+        const dateStr = `${year}${month}${day}`;
+        const periodNumber = dateStr + '2000' + String(20001 + total30sPeriods);
+        document.getElementById('period30s').textContent = periodNumber;
+
+        const formattedTime = `   00  :  ${String(remainingSeconds).padStart(2, '0')}`
+            .replace(/(\d)(?=\d)/g, '$1 ');
+        document.getElementById('timer30s').textContent = formattedTime;
+    }, 1000);
+}
