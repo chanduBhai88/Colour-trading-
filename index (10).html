@@ -1,7 +1,8 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Khatarnak Wingo Predictor</title>
   <style>
     body {
@@ -53,7 +54,8 @@
   </style>
 </head>
 <body>
-  <h1>⚡ Khatarnak Wingo 1 Min Predictor ⚡</h1>  <div class="box">
+  <h1>⚡ Khatarnak Wingo 1 Min Predictor ⚡</h1>
+  <div class="box">
     <div>Next Prediction in: <span id="timer">60</span>s</div>
     <div class="result">
       <strong>Predicted:</strong> <span id="prediction">Calculating...</span>
@@ -62,44 +64,79 @@
       <strong>Last Result:</strong> <span id="lastResult">Waiting...</span>
     </div>
     <button class="btn" onclick="manualReset()">🔁 Reset</button>
-  </div>  <div class="trend">
+  </div>
+  <div class="trend">
     <h3>📈 Last 5 Results:</h3>
     <div id="history">Loading...</div>
-  </div><button class="btn fullscreen-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+  </div>
+  <button class="btn fullscreen-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
 
   <script>
     let timer = 60;
-    let interval = setInterval(() => {
-      timer--;
-      document.getElementById('timer').innerText = timer;
-      if (timer === 0) {
-        timer = 60;
-        getPrediction();
-      }
-    }, 1000);
-
     let history = [];
 
+    // Start prediction timer
+    function startTimer() {
+      getPrediction(); // Initial call
+      setInterval(() => {
+        timer--;
+        document.getElementById('timer').innerText = timer;
+        if (timer === 0) {
+          timer = 60;
+          getPrediction();
+        }
+      }, 1000);
+    }
+
+    // Dummy prediction logic
     function getPrediction() {
-      // Dummy API Data (replace with real API later)
       const number = Math.floor(Math.random() * 10);
       const color = number % 2 === 0 ? 'Green' : 'Red';
       const violetChance = Math.random() < 0.1;
       const finalColor = violetChance ? 'Violet' : color;
-
       const size = number >= 5 ? 'Big' : 'Small';
 
       const resultText = `${finalColor} - ${size} (${number})`;
       document.getElementById('lastResult').innerText = resultText;
-      document.getElementById('prediction').innerText = predictNext();
 
       history.unshift(resultText);
       if (history.length > 5) history.pop();
+
       document.getElementById('history').innerHTML = history.map(h => `<div>${h}</div>`).join('');
+
+      document.getElementById('prediction').innerText = predictNext();
     }
 
+    // Simple prediction based on last number
     function predictNext() {
-      if (history.length < 3) return 'Waiting for data...';
+      if (history.length < 1) return 'Waiting for data...';
 
-      const lastNum = parseInt(history[0].match(/(\d)/)[1]);
-      if (lastNum >= 
+      const last = history[0];
+      const numberMatch = last.match(/\((\d+)\)/);
+      if (!numberMatch) return 'Predicting...';
+
+      const lastNum = parseInt(numberMatch[1]);
+      const nextPrediction = lastNum % 2 === 0 ? 'Red - Small' : 'Green - Big';
+      return nextPrediction;
+    }
+
+    function manualReset() {
+      timer = 60;
+      document.getElementById('timer').innerText = timer;
+      getPrediction();
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    startTimer(); // Call this on load
+  </script>
+</body>
+</html>
