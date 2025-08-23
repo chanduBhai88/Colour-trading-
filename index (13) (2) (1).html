@@ -1,197 +1,91 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>BIG/SMALL Predictor</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            min-height: 100vh;
-            margin:0;
-            padding:0;
-            /* Achcha wallpaper */
-            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80') no-repeat center center fixed;
-            background-size: cover;
-            display:flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .mainbox {
-            background: rgba(255,255,255,0.89);
-            border-radius: 27px;
-            padding: 32px 24px 30px 24px;
-            box-shadow: 0 6px 28px #2333a930;
-            max-width: 390px;
-            width:90vw;
-            margin:auto;
-        }
-        h2 { text-align: center;color: #234; font-size:2rem;margin-top:0;}
-        .inputs {display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin:20px 0 18px;}
-        .btnchoice { 
-            width:79px;height:44px;font-size:17px;
-            background: #2986ff;
-            font-weight:600;
-            color:#fff;
-            border-radius: 11px;
-            border:none;cursor:pointer;
-            margin:1px 3px;
-            box-shadow: 0 2px 6px #2986ff31;
-            transition: 0.2s;
-        }
-        .btnchoice.selected { background: #45d776; color: #222;}
-        #predictBtn, #clearBtn {
-            padding: 13px 27px; font-size: 18px;
-            margin: 8px 14px 14px 0;
-            border-radius: 14px;
-            background: #222;
-            color:#fff; font-weight:600;cursor:pointer; border:none;
-            transition:0.2s; box-shadow:0 2px 10px #2222;
-        }
-        #clearBtn { background:#e65454;}
-        #predictBtn:hover {background:#2986ff;}
-        #clearBtn:hover {background:#ff2323;}
-        #result {
-            margin: 20px 0 13px; 
-            padding: 24px 12px 19px 12px;
-            background: linear-gradient(125deg,#d8f3ff,#c2ffe1 60%);
-            border-radius: 20px;
-            font-size: 2rem;
-            text-align:center;
-            font-weight:700;
-            min-height:65px;
-            box-shadow:0 0 16px #0266cd22;
-            opacity:0; transition: opacity 0.7s;
-        }
-        #result.show { opacity:1;}
-        #history {
-            font-size:16px;margin-top:18px;text-align:center;
-        }
-        .setrow {margin-bottom:5px;}
-        .entry {
-            padding:7px 14px;
-            border-radius:8px;
-            margin:2px 2px;
-            font-size:1.02rem;
-            display:inline-block;
-            font-weight: bold;
-        }
-        .big { background: #5eb5ff; color:#042246;}
-        .small { background: #86ffc1; color:#084d2f;}
-        @media (max-width:550px) {
-            .mainbox { padding:16px 2px; max-width:98vw;}
-            h2 {font-size:1.35rem}
-            .inputs .btnchoice {width:70px;height:37px;font-size:15px;}
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>English Learning App</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background: #f0f8ff; }
+  h1, h2 { color: #2c3e50; }
+  .section { margin-bottom: 30px; }
+  button { padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; }
+  .quiz-option { margin: 10px 0; }
+  .correct { color: green; font-weight: bold; }
+  .wrong { color: red; font-weight: bold; }
+</style>
 </head>
 <body>
-<div class="mainbox">
-    <h2>BIG/SMALL Predictor</h2>
-    <div style="text-align:center; font-size:18px; margin-bottom:12px; color:#123;">
-        8 result choose karo (har box pe BIG ya SMALL dabao) 👇
-    </div>
-    <div class="inputs" id="inputs"></div>
-    <div style="text-align:center;">
-        <button id="predictBtn" onclick="predictResult()">Result</button>
-        <button id="clearBtn" onclick="clearHistory()">Clear</button>
-    </div>
-    <div id="result"></div>
-    <div id="history"></div>
-</div>
+
+  <h1>English Learning App</h1>
+
+  <div class="section" id="alphabets">
+    <h2>English Alphabets</h2>
+    <p>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</p>
+  </div>
+
+  <div class="section" id="common-words">
+    <h2>Common English Words</h2>
+    <ul>
+      <li>Hello</li>
+      <li>Thank you</li>
+      <li>Please</li>
+      <li>Sorry</li>
+      <li>Goodbye</li>
+    </ul>
+  </div>
+
+  <div class="section" id="simple-sentences">
+    <h2>Simple Sentences</h2>
+    <ul>
+      <li>I am a student.</li>
+      <li>How are you?</li>
+      <li>What is your name?</li>
+      <li>Where do you live?</li>
+      <li>I like to learn English.</li>
+    </ul>
+  </div>
+
+  <div class="section" id="grammar">
+    <h2>Basic Grammar: Present Simple Tense</h2>
+    <p>Use the base form of the verb for I, You, We, They.<br/>
+       Add -s or -es for He, She, It.<br/>
+       Example: I play, He plays.</p>
+  </div>
+
+  <div class="section" id="quiz">
+    <h2>Quiz: Choose the correct answer</h2>
+    <p><strong>Question:</strong> What is the correct sentence?</p>
+    <div class="quiz-option"><input type="radio" name="q1" id="opt1" value="wrong"><label for="opt1">He go to school.</label></div>
+    <div class="quiz-option"><input type="radio" name="q1" id="opt2" value="correct"><label for="opt2">He goes to school.</label></div>
+    <div class="quiz-option"><input type="radio" name="q1" id="opt3" value="wrong"><label for="opt3">He going school.</label></div>
+    <button onclick="checkAnswer()">Submit</button>
+    <p id="quiz-result"></p>
+  </div>
 
 <script>
-    // UI-8 buttons for selection
-    let selectedChoices = Array(8).fill(""); // ["BIG","SMALL" ...]
-    let history = [];
-
-    function createInputs() {
-        let inputsDiv = document.getElementById('inputs');
-        inputsDiv.innerHTML = '';
-        for (let i = 0; i < 8; i++) {
-            let box = document.createElement('div');
-            box.style.display="inline-block";
-            box.style.margin="4px";
-            let bigBtn = document.createElement('button');
-            bigBtn.innerText = "BIG";
-            bigBtn.className = "btnchoice";
-            bigBtn.onclick = function(){
-                selectedChoices[i]="BIG";
-                bigBtn.classList.add('selected');
-                smallBtn.classList.remove('selected');
-            };
-            let smallBtn = document.createElement('button');
-            smallBtn.innerText = "SMALL";
-            smallBtn.className = "btnchoice";
-            smallBtn.onclick = function(){
-                selectedChoices[i]="SMALL";
-                smallBtn.classList.add('selected');
-                bigBtn.classList.remove('selected');
-            };
-            box.appendChild(bigBtn);
-            box.appendChild(smallBtn);
-            inputsDiv.appendChild(box);
-        }
+  function checkAnswer() {
+    const options = document.getElementsByName('q1');
+    let result = document.getElementById('quiz-result');
+    let selected = null;
+    for (const option of options) {
+      if (option.checked) {
+        selected = option.value;
+      }
     }
-    createInputs();
-
-    function predictResult() {
-        let resultDiv = document.getElementById("result");
-        resultDiv.classList.remove('show');
-        
-        // Check all selected
-        if (selectedChoices.some(x=>x!=="BIG" && x!=="SMALL")) {
-            resultDiv.innerHTML = "<span style='color:red;'>Sab selection complete karo! Har box mein BIG ya SMALL dabao.</span>";
-            resultDiv.classList.add('show');
-            return;
-        }
-        let bigCount = selectedChoices.filter(x => x==="BIG").length;
-        let smallCount = selectedChoices.filter(x => x==="SMALL").length;
-
-        let prediction = "";
-        if (bigCount > smallCount)
-            prediction = "<span style='color:#096496'>Next <b>SMALL</b> aane ki sambhavna zyada hai!</span>";
-        else if (smallCount > bigCount)
-            prediction = "<span style='color:#14994b'>Next <b>BIG</b> aane ki sambhavna zyada hai!</span>";
-        else
-            prediction = "<span style='color:#813dff'>Dono ka chance barabar hai!</span>";
-
-        resultDiv.innerHTML = `
-          ${prediction}<br>
-          <span style="font-size:1.28rem;font-weight:400;">
-             Last 8 mein BIG: <b>${bigCount}</b> | SMALL: <b>${smallCount}</b>
-          </span>
-        `;
-        setTimeout(()=>{resultDiv.classList.add('show');},50);
-
-        // Save to history
-        history.unshift([...selectedChoices]);
-        if (history.length>10) history.pop();
-        showHistory();
-
-        // Reset selection for next
-        selectedChoices = Array(8).fill("");
-        createInputs(); // reset buttons
+    if (selected === null) {
+      result.textContent = 'Please select an answer.';
+      result.style.color = 'orange';
+      return;
     }
-
-    function showHistory() {
-        let hd = document.getElementById("history");
-        if(history.length===0) {hd.innerHTML=""; return;}
-        hd.innerHTML = "<b>Last 10 History:</b><br>" + history.map((row,idx)=>{
-            return `<div class='setrow'><small>Set ${idx+1}:</small> ` +
-              row.map(txt=>
-                `<span class='entry ${txt==="BIG"?"big":"small"}'>${txt}</span>`
-              ).join(" ") + `</div>`;
-        }).join("");
+    if (selected === 'correct') {
+      result.textContent = 'Correct! Well done.';
+      result.className = 'correct';
+    } else {
+      result.textContent = 'Wrong answer. Try again!';
+      result.className = 'wrong';
     }
-
-    function clearHistory() {
-        history = [];
-        document.getElementById("result").classList.remove('show');
-        document.getElementById("result").innerHTML="";
-        document.getElementById("history").innerHTML="";
-        selectedChoices = Array(8).fill("");
-        createInputs();
-    }
+  }
 </script>
+
 </body>
 </html>
