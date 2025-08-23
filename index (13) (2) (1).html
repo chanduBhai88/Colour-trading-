@@ -2,106 +2,196 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>BIG/SMALL Predictor (Hindi)</title>
+    <title>BIG/SMALL Predictor</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f3f9fc; max-width: 400px; margin: 25px auto; }
-        h2 { color: #235; }
-        .inputs { margin: 10px 0 18px 0; }
-        .inputs input { width: 60px; padding: 8px; font-size: 16px; text-align: center; margin: 4px 2px;}
-        #predictBtn, #clearBtn { padding: 10px 22px; font-size: 16px; margin: 6px 4px;}
-        #result { margin: 22px 0 10px 0; padding: 14px 12px; background: #eef; border-radius: 9px; font-size: 18px; opacity:0; transition: opacity 0.7s;}
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            margin:0;
+            padding:0;
+            /* Achcha wallpaper */
+            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80') no-repeat center center fixed;
+            background-size: cover;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .mainbox {
+            background: rgba(255,255,255,0.89);
+            border-radius: 27px;
+            padding: 32px 24px 30px 24px;
+            box-shadow: 0 6px 28px #2333a930;
+            max-width: 390px;
+            width:90vw;
+            margin:auto;
+        }
+        h2 { text-align: center;color: #234; font-size:2rem;margin-top:0;}
+        .inputs {display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin:20px 0 18px;}
+        .btnchoice { 
+            width:79px;height:44px;font-size:17px;
+            background: #2986ff;
+            font-weight:600;
+            color:#fff;
+            border-radius: 11px;
+            border:none;cursor:pointer;
+            margin:1px 3px;
+            box-shadow: 0 2px 6px #2986ff31;
+            transition: 0.2s;
+        }
+        .btnchoice.selected { background: #45d776; color: #222;}
+        #predictBtn, #clearBtn {
+            padding: 13px 27px; font-size: 18px;
+            margin: 8px 14px 14px 0;
+            border-radius: 14px;
+            background: #222;
+            color:#fff; font-weight:600;cursor:pointer; border:none;
+            transition:0.2s; box-shadow:0 2px 10px #2222;
+        }
+        #clearBtn { background:#e65454;}
+        #predictBtn:hover {background:#2986ff;}
+        #clearBtn:hover {background:#ff2323;}
+        #result {
+            margin: 20px 0 13px; 
+            padding: 24px 12px 19px 12px;
+            background: linear-gradient(125deg,#d8f3ff,#c2ffe1 60%);
+            border-radius: 20px;
+            font-size: 2rem;
+            text-align:center;
+            font-weight:700;
+            min-height:65px;
+            box-shadow:0 0 16px #0266cd22;
+            opacity:0; transition: opacity 0.7s;
+        }
         #result.show { opacity:1;}
-        #history { font-size: 15px; margin-top: 13px; }
-        .entry {padding:4px 7px; border-radius:6px; margin:2px; display:inline-block;}
-        .big { background:#c9e6ff; }
-        .small { background:#d9ffda; }
+        #history {
+            font-size:16px;margin-top:18px;text-align:center;
+        }
+        .setrow {margin-bottom:5px;}
+        .entry {
+            padding:7px 14px;
+            border-radius:8px;
+            margin:2px 2px;
+            font-size:1.02rem;
+            display:inline-block;
+            font-weight: bold;
+        }
+        .big { background: #5eb5ff; color:#042246;}
+        .small { background: #86ffc1; color:#084d2f;}
+        @media (max-width:550px) {
+            .mainbox { padding:16px 2px; max-width:98vw;}
+            h2 {font-size:1.35rem}
+            .inputs .btnchoice {width:70px;height:37px;font-size:15px;}
+        }
     </style>
 </head>
 <body>
-    <h2>BIG/SMALL Prediction Tool (Hindi)</h2>
-    <div class="inputs" id="inputs">
-        <!-- 8 Input Boxes -->
-        <input maxlength="6" id="in1" placeholder="BIG/SMALL">
-        <input maxlength="6" id="in2" placeholder="BIG/SMALL">
-        <input maxlength="6" id="in3" placeholder="BIG/SMALL">
-        <input maxlength="6" id="in4" placeholder="BIG/SMALL">
-        <input maxlength="6" id="in5" placeholder="BIG/SMALL">
-        <input maxlength="6" id="in6" placeholder="BIG/SMALL">
-        <input maxlength="6" id="in7" placeholder="BIG/SMALL">
-        <input maxlength="6" id="in8" placeholder="BIG/SMALL">
+<div class="mainbox">
+    <h2>BIG/SMALL Predictor</h2>
+    <div style="text-align:center; font-size:18px; margin-bottom:12px; color:#123;">
+        8 result choose karo (har box pe BIG ya SMALL dabao) 👇
     </div>
-    <button id="predictBtn" onclick="predictResult()">Result</button>
-    <button id="clearBtn" onclick="clearHistory()">Clear</button>
+    <div class="inputs" id="inputs"></div>
+    <div style="text-align:center;">
+        <button id="predictBtn" onclick="predictResult()">Result</button>
+        <button id="clearBtn" onclick="clearHistory()">Clear</button>
+    </div>
     <div id="result"></div>
     <div id="history"></div>
+</div>
 
-    <script>
-        // Memory for last 10 result sets
-        let history = [];
+<script>
+    // UI-8 buttons for selection
+    let selectedChoices = Array(8).fill(""); // ["BIG","SMALL" ...]
+    let history = [];
 
-        function predictResult() {
-            let resultDiv = document.getElementById("result");
-            resultDiv.classList.remove('show');
-            let inputs = [];
-            for (let i = 1; i <= 8; i++) {
-                let val = document.getElementById('in'+i).value.trim().toUpperCase();
-                if (val !== "BIG" && val !== "SMALL") {
-                    resultDiv.innerHTML = "<span style='color:red;'>Galat input! Sirf BIG/SMALL likho.</span>";
-                    resultDiv.classList.add('show');
-                    return;
-                }
-                inputs.push(val);
-            }
-            // Last 8 ka analysis:
-            let bigCount = inputs.filter(x => x==="BIG").length;
-            let smallCount = inputs.filter(x => x==="SMALL").length;
-
-            let prediction;
-            if (bigCount > smallCount)
-                prediction = "<b>SMALL</b> aane ki sambhavna zyada hai!";
-            else if (smallCount > bigCount)
-                prediction = "<b>BIG</b> aane ki sambhavna zyada hai!";
-            else
-                prediction = "Dono ka chance barabar hai!";
-
-            // Animation trigger
-            resultDiv.innerHTML = `
-                <div style="font-size:20px; font-weight:bold; margin-bottom:8px;">
-                  Predict: ${prediction}
-                </div>
-                Last 8 mein - <span style="color:blue;">BIG: ${bigCount}</span>, <span style="color:green;">SMALL: ${smallCount}</span>
-            `;
-            setTimeout(()=>{resultDiv.classList.add('show');},50);
-
-            // Save to history (max 10)
-            history.unshift(inputs.join(' ')); // first daalo
-            if (history.length>10) history.pop();
-            showHistory();
-
-            // Inputs khali karo
-            for (let i = 1; i <= 8; i++) document.getElementById('in'+i).value="";
+    function createInputs() {
+        let inputsDiv = document.getElementById('inputs');
+        inputsDiv.innerHTML = '';
+        for (let i = 0; i < 8; i++) {
+            let box = document.createElement('div');
+            box.style.display="inline-block";
+            box.style.margin="4px";
+            let bigBtn = document.createElement('button');
+            bigBtn.innerText = "BIG";
+            bigBtn.className = "btnchoice";
+            bigBtn.onclick = function(){
+                selectedChoices[i]="BIG";
+                bigBtn.classList.add('selected');
+                smallBtn.classList.remove('selected');
+            };
+            let smallBtn = document.createElement('button');
+            smallBtn.innerText = "SMALL";
+            smallBtn.className = "btnchoice";
+            smallBtn.onclick = function(){
+                selectedChoices[i]="SMALL";
+                smallBtn.classList.add('selected');
+                bigBtn.classList.remove('selected');
+            };
+            box.appendChild(bigBtn);
+            box.appendChild(smallBtn);
+            inputsDiv.appendChild(box);
         }
+    }
+    createInputs();
 
-        function showHistory() {
-            let historyDiv = document.getElementById("history");
-            if(history.length==0) { historyDiv.innerHTML = ''; return;}
-            historyDiv.innerHTML = "<b>Last 10 History:</b><br>" +
-                history.map((row,idx)=>{
-                    let arr = row.split(' ');
-                    return `<span style="margin-right:10px"><small>Set ${idx+1}:</small> ` +
-                     arr.map(txt=>`<span class='entry ${txt==="BIG"?"big":"small"}'>${txt}</span>`).join(' ') +
-                    '</span>';
-                }).join("<br>");
+    function predictResult() {
+        let resultDiv = document.getElementById("result");
+        resultDiv.classList.remove('show');
+        
+        // Check all selected
+        if (selectedChoices.some(x=>x!=="BIG" && x!=="SMALL")) {
+            resultDiv.innerHTML = "<span style='color:red;'>Sab selection complete karo! Har box mein BIG ya SMALL dabao.</span>";
+            resultDiv.classList.add('show');
+            return;
         }
+        let bigCount = selectedChoices.filter(x => x==="BIG").length;
+        let smallCount = selectedChoices.filter(x => x==="SMALL").length;
 
-        function clearHistory() {
-            // Reset sab
-            history = [];
-            document.getElementById("result").classList.remove('show');
-            document.getElementById("result").innerHTML = '';
-            document.getElementById("history").innerHTML = '';
-            for (let i = 1; i <= 8; i++) document.getElementById('in'+i).value="";
-        }
-    </script>
+        let prediction = "";
+        if (bigCount > smallCount)
+            prediction = "<span style='color:#096496'>Next <b>SMALL</b> aane ki sambhavna zyada hai!</span>";
+        else if (smallCount > bigCount)
+            prediction = "<span style='color:#14994b'>Next <b>BIG</b> aane ki sambhavna zyada hai!</span>";
+        else
+            prediction = "<span style='color:#813dff'>Dono ka chance barabar hai!</span>";
+
+        resultDiv.innerHTML = `
+          ${prediction}<br>
+          <span style="font-size:1.28rem;font-weight:400;">
+             Last 8 mein BIG: <b>${bigCount}</b> | SMALL: <b>${smallCount}</b>
+          </span>
+        `;
+        setTimeout(()=>{resultDiv.classList.add('show');},50);
+
+        // Save to history
+        history.unshift([...selectedChoices]);
+        if (history.length>10) history.pop();
+        showHistory();
+
+        // Reset selection for next
+        selectedChoices = Array(8).fill("");
+        createInputs(); // reset buttons
+    }
+
+    function showHistory() {
+        let hd = document.getElementById("history");
+        if(history.length===0) {hd.innerHTML=""; return;}
+        hd.innerHTML = "<b>Last 10 History:</b><br>" + history.map((row,idx)=>{
+            return `<div class='setrow'><small>Set ${idx+1}:</small> ` +
+              row.map(txt=>
+                `<span class='entry ${txt==="BIG"?"big":"small"}'>${txt}</span>`
+              ).join(" ") + `</div>`;
+        }).join("");
+    }
+
+    function clearHistory() {
+        history = [];
+        document.getElementById("result").classList.remove('show');
+        document.getElementById("result").innerHTML="";
+        document.getElementById("history").innerHTML="";
+        selectedChoices = Array(8).fill("");
+        createInputs();
+    }
+</script>
 </body>
 </html>
