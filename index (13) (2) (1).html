@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>BIG/SMALL Predictor (Hindi)</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f3f9fc; max-width: 400px; margin: 25px auto; }
+        h2 { color: #235; }
+        .inputs { margin: 10px 0 18px 0; }
+        .inputs input { width: 60px; padding: 8px; font-size: 16px; text-align: center; margin: 4px 2px;}
+        #predictBtn, #clearBtn { padding: 10px 22px; font-size: 16px; margin: 6px 4px;}
+        #result { margin: 22px 0 10px 0; padding: 14px 12px; background: #eef; border-radius: 9px; font-size: 18px; opacity:0; transition: opacity 0.7s;}
+        #result.show { opacity:1;}
+        #history { font-size: 15px; margin-top: 13px; }
+        .entry {padding:4px 7px; border-radius:6px; margin:2px; display:inline-block;}
+        .big { background:#c9e6ff; }
+        .small { background:#d9ffda; }
+    </style>
+</head>
+<body>
+    <h2>BIG/SMALL Prediction Tool (Hindi)</h2>
+    <div class="inputs" id="inputs">
+        <!-- 8 Input Boxes -->
+        <input maxlength="6" id="in1" placeholder="BIG/SMALL">
+        <input maxlength="6" id="in2" placeholder="BIG/SMALL">
+        <input maxlength="6" id="in3" placeholder="BIG/SMALL">
+        <input maxlength="6" id="in4" placeholder="BIG/SMALL">
+        <input maxlength="6" id="in5" placeholder="BIG/SMALL">
+        <input maxlength="6" id="in6" placeholder="BIG/SMALL">
+        <input maxlength="6" id="in7" placeholder="BIG/SMALL">
+        <input maxlength="6" id="in8" placeholder="BIG/SMALL">
+    </div>
+    <button id="predictBtn" onclick="predictResult()">Result</button>
+    <button id="clearBtn" onclick="clearHistory()">Clear</button>
+    <div id="result"></div>
+    <div id="history"></div>
+
+    <script>
+        // Memory for last 10 result sets
+        let history = [];
+
+        function predictResult() {
+            let resultDiv = document.getElementById("result");
+            resultDiv.classList.remove('show');
+            let inputs = [];
+            for (let i = 1; i <= 8; i++) {
+                let val = document.getElementById('in'+i).value.trim().toUpperCase();
+                if (val !== "BIG" && val !== "SMALL") {
+                    resultDiv.innerHTML = "<span style='color:red;'>Galat input! Sirf BIG/SMALL likho.</span>";
+                    resultDiv.classList.add('show');
+                    return;
+                }
+                inputs.push(val);
+            }
+            // Last 8 ka analysis:
+            let bigCount = inputs.filter(x => x==="BIG").length;
+            let smallCount = inputs.filter(x => x==="SMALL").length;
+
+            let prediction;
+            if (bigCount > smallCount)
+                prediction = "<b>SMALL</b> aane ki sambhavna zyada hai!";
+            else if (smallCount > bigCount)
+                prediction = "<b>BIG</b> aane ki sambhavna zyada hai!";
+            else
+                prediction = "Dono ka chance barabar hai!";
+
+            // Animation trigger
+            resultDiv.innerHTML = `
+                <div style="font-size:20px; font-weight:bold; margin-bottom:8px;">
+                  Predict: ${prediction}
+                </div>
+                Last 8 mein - <span style="color:blue;">BIG: ${bigCount}</span>, <span style="color:green;">SMALL: ${smallCount}</span>
+            `;
+            setTimeout(()=>{resultDiv.classList.add('show');},50);
+
+            // Save to history (max 10)
+            history.unshift(inputs.join(' ')); // first daalo
+            if (history.length>10) history.pop();
+            showHistory();
+
+            // Inputs khali karo
+            for (let i = 1; i <= 8; i++) document.getElementById('in'+i).value="";
+        }
+
+        function showHistory() {
+            let historyDiv = document.getElementById("history");
+            if(history.length==0) { historyDiv.innerHTML = ''; return;}
+            historyDiv.innerHTML = "<b>Last 10 History:</b><br>" +
+                history.map((row,idx)=>{
+                    let arr = row.split(' ');
+                    return `<span style="margin-right:10px"><small>Set ${idx+1}:</small> ` +
+                     arr.map(txt=>`<span class='entry ${txt==="BIG"?"big":"small"}'>${txt}</span>`).join(' ') +
+                    '</span>';
+                }).join("<br>");
+        }
+
+        function clearHistory() {
+            // Reset sab
+            history = [];
+            document.getElementById("result").classList.remove('show');
+            document.getElementById("result").innerHTML = '';
+            document.getElementById("history").innerHTML = '';
+            for (let i = 1; i <= 8; i++) document.getElementById('in'+i).value="";
+        }
+    </script>
+</body>
+</html>
