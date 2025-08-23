@@ -3,28 +3,63 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>English Learning App</title>
+<title>Simple English Learning</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 20px; background: #f0f8ff; }
-  h1, h2 { color: #2c3e50; }
-  .section { margin-bottom: 30px; }
-  button { padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; }
-  .quiz-option { margin: 10px 0; }
-  .correct { color: green; font-weight: bold; }
-  .wrong { color: red; font-weight: bold; }
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f9f9f9;
+    color: #333;
+  }
+  h1, h2 {
+    color: #2a2a72;
+  }
+  button {
+    padding: 10px 20px;
+    background-color: #0077cc;
+    border: none;
+    color: white;
+    font-size: 16px;
+    margin: 15px 0;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  #apple-section {
+    margin-top: 20px;
+    padding: 15px;
+    border: 2px dashed #0077cc;
+    display: none; /* hidden initially */
+    background: #e6f0ff;
+  }
+  ul {
+    line-height: 1.6;
+  }
+  .quiz-option {
+    margin: 8px 0;
+  }
+  #quiz-result {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  .correct {
+    color: green;
+  }
+  .wrong {
+    color: red;
+  }
 </style>
 </head>
 <body>
 
   <h1>English Learning App</h1>
 
-  <div class="section" id="alphabets">
+  <section>
     <h2>English Alphabets</h2>
     <p>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</p>
-  </div>
+  </section>
 
-  <div class="section" id="common-words">
-    <h2>Common English Words</h2>
+  <section>
+    <h2>Common Words</h2>
     <ul>
       <li>Hello</li>
       <li>Thank you</li>
@@ -32,9 +67,9 @@
       <li>Sorry</li>
       <li>Goodbye</li>
     </ul>
-  </div>
+  </section>
 
-  <div class="section" id="simple-sentences">
+  <section>
     <h2>Simple Sentences</h2>
     <ul>
       <li>I am a student.</li>
@@ -43,45 +78,73 @@
       <li>Where do you live?</li>
       <li>I like to learn English.</li>
     </ul>
-  </div>
+  </section>
 
-  <div class="section" id="grammar">
-    <h2>Basic Grammar: Present Simple Tense</h2>
-    <p>Use the base form of the verb for I, You, We, They.<br/>
-       Add -s or -es for He, She, It.<br/>
-       Example: I play, He plays.</p>
-  </div>
+  <section>
+    <h2>Basic Grammar (Present Simple)</h2>
+    <p>Use base form of verb for I, You, We, They.<br />
+    Add "s" or "es" for He, She, It.<br />
+    Example: I play, He plays.</p>
+  </section>
 
-  <div class="section" id="quiz">
-    <h2>Quiz: Choose the correct answer</h2>
-    <p><strong>Question:</strong> What is the correct sentence?</p>
-    <div class="quiz-option"><input type="radio" name="q1" id="opt1" value="wrong"><label for="opt1">He go to school.</label></div>
-    <div class="quiz-option"><input type="radio" name="q1" id="opt2" value="correct"><label for="opt2">He goes to school.</label></div>
-    <div class="quiz-option"><input type="radio" name="q1" id="opt3" value="wrong"><label for="opt3">He going school.</label></div>
-    <button onclick="checkAnswer()">Submit</button>
+  <button id="showAppleBtn">Show "A for Apple"</button>
+
+  <section id="apple-section">
+    <h2>A for Apple</h2>
+    <p><strong>A</strong> is for <em>Apple</em>.</p>
+    <img src="https://cdn-icons-png.flaticon.com/512/415/415733.png" alt="Apple" width="120" />
+  </section>
+
+  <section>
+    <h2>Quiz: Choose the correct sentence</h2>
+    <p><strong>Question:</strong> Which sentence is correct?</p>
+    <div class="quiz-option">
+      <input type="radio" id="opt1" name="quiz" value="wrong" />
+      <label for="opt1">He go to school.</label>
+    </div>
+    <div class="quiz-option">
+      <input type="radio" id="opt2" name="quiz" value="correct" />
+      <label for="opt2">He goes to school.</label>
+    </div>
+    <div class="quiz-option">
+      <input type="radio" id="opt3" name="quiz" value="wrong" />
+      <label for="opt3">He going school.</label>
+    </div>
+    <button onclick="checkQuiz()">Submit Answer</button>
     <p id="quiz-result"></p>
-  </div>
+  </section>
 
 <script>
-  function checkAnswer() {
-    const options = document.getElementsByName('q1');
-    let result = document.getElementById('quiz-result');
-    let selected = null;
+  // Button to show 'A for Apple' section
+  document.getElementById('showAppleBtn').addEventListener('click', function() {
+    document.getElementById('apple-section').style.display = 'block';
+    this.style.display = 'none';
+  });
+
+  // Quiz check function
+  function checkQuiz() {
+    const options = document.getElementsByName('quiz');
+    const result = document.getElementById('quiz-result');
+    let selectedValue = null;
+
     for (const option of options) {
       if (option.checked) {
-        selected = option.value;
+        selectedValue = option.value;
+        break;
       }
     }
-    if (selected === null) {
-      result.textContent = 'Please select an answer.';
+
+    if (selectedValue === null) {
+      result.textContent = 'Please select an answer first.';
       result.style.color = 'orange';
       return;
     }
-    if (selected === 'correct') {
-      result.textContent = 'Correct! Well done.';
+
+    if (selectedValue === 'correct') {
+      result.textContent = 'Correct! Great job.';
       result.className = 'correct';
     } else {
-      result.textContent = 'Wrong answer. Try again!';
+      result.textContent = 'Wrong answer, try again.';
       result.className = 'wrong';
     }
   }
