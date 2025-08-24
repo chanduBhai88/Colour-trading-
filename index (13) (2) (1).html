@@ -1,158 +1,710 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>English Learning A to Z</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    color: #222;
-    background: url('https://cdn.pixabay.com/photo/2017/09/26/13/21/background-2788070_1280.png') no-repeat center center fixed;
-    background-size: cover;
-  }
-  h1, h2 {
-    color: #2b3e77;
-    text-align: center;
-    text-shadow: 1px 1px 2px #fff;
-  }
-  #letters {
-    display: none; /* Hidden initially */
-    margin-top: 20px;
-  }
-  .letter-card {
-    background: rgba(255, 255, 255, 0.85);
-    border: 2px solid #2b3e77;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 10px auto;
-    max-width: 400px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-  }
-  .letter-card img {
-    width: 80px;
-    height: 80px;
-    margin-right: 20px;
-    object-fit: contain;
-  }
-  .letter-text {
-    font-size: 22px;
-    font-weight: bold;
-    color: #2b3e77;
-    text-shadow: 1px 1px 0 #fff;
-  }
-  button {
-    display: block;
-    margin: 20px auto;
-    background-color: #2b3e77;
-    color: white;
-    font-size: 18px;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    box-shadow: 0 4px 7px rgba(43,62,119,0.5);
-  }
-  button:hover {
-    background-color: #4169e1;
-  }
-  #quiz-section {
-    margin-top: 40px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  }
-  .quiz-option {
-    margin: 10px 0;
-  }
-  #quiz-result {
-    font-weight: bold;
-    margin-top: 15px;
-  }
-  .correct {
-    color: green;
-  }
-  .wrong {
-    color: red;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Small Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff8a00, #e52e71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255, 138, 0, 0.3);
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a0a0c0;
+            margin-bottom: 20px;
+        }
+        
+        .game-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .input-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .input-title {
+            color: #ffce5c;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        
+        .number-selection {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .number-btn {
+            padding: 15px 0;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .number-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .number-btn.selected {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 65, 108, 0.5);
+        }
+        
+        .size-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .size-btn {
+            padding: 20px 0;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .big-btn {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+        }
+        
+        .small-btn {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+        
+        .size-btn.selected {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+        }
+        
+        .big-btn.selected {
+            box-shadow: 0 0 25px rgba(255, 65, 108, 0.6);
+        }
+        
+        .small-btn.selected {
+            box-shadow: 0 0 25px rgba(46, 204, 113, 0.6);
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .action-btn {
+            padding: 18px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #addBtn {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+        }
+        
+        #addBtn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.4);
+        }
+        
+        #clearBtn {
+            background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+            color: white;
+        }
+        
+        #clearBtn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(198, 40, 40, 0.4);
+        }
+        
+        .results-section {
+            flex: 2;
+            min-width: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .result-display {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-item {
+            display: inline-block;
+            padding: 20px 35px;
+            margin: 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 2.2rem;
+            text-align: center;
+            animation: popIn 0.6s ease-out;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-item::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        .number {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-width: 100px;
+        }
+        
+        .big {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            min-width: 120px;
+        }
+        
+        .small {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            min-width: 120px;
+        }
+        
+        .history-title {
+            color: #ffce5c;
+            margin: 25px 0 15px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid rgba(255, 206, 92, 0.3);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .history {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .history-item {
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            animation: fadeIn 0.5s ease-out;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .history-item:nth-child(odd) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        @keyframes popIn {
+            0% { 
+                transform: scale(0) rotate(-180deg); 
+                opacity: 0; 
+            }
+            70% { 
+                transform: scale(1.2) rotate(10deg); 
+            }
+            100% { 
+                transform: scale(1) rotate(0); 
+                opacity: 1; 
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            20% { transform: translateX(100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+        
+        @media (max-width: 900px) {
+            .game-container {
+                flex-direction: column;
+            }
+            
+            .input-section, .results-section {
+                min-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffce5c;
+            opacity: 0;
+        }
+        
+        .win-animation {
+            position: absolute;
+            font-size: 5rem;
+            font-weight: 800;
+            opacity: 0;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #ff8a00, #e52e71, #ff8a00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255, 138, 0, 0.5);
+        }
+        
+        .selection-info {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            min-height: 30px;
+        }
+        
+        .selected-number, .selected-size {
+            font-weight: bold;
+            color: #ffce5c;
+        }
+        
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            opacity: 0;
+        }
+        
+        @keyframes firework {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-
-  <h1>English Learning A to Z</h1>
-
-  <button id="showLettersBtn">Show A to Z Letters</button>
-
-  <div id="letters">
-    <!-- Letter cards here (same as last code) -->
-    <div class="letter-card">
-      <img src="https://cdn-icons-png.flaticon.com/512/415/415733.png" alt="Apple" />
-      <div class="letter-text">A for Apple</div>
+    <div class="container">
+        <header>
+            <h1>BIG SMALL GAME</h1>
+            <p class="subtitle">Select a number and size to see animated results</p>
+        </header>
+        
+        <div class="game-container">
+            <div class="input-section">
+                <h2 class="input-title">Select Your Number</h2>
+                <div class="number-selection">
+                    <button class="number-btn" data-number="0">0</button>
+                    <button class="number-btn" data-number="1">1</button>
+                    <button class="number-btn" data-number="2">2</button>
+                    <button class="number-btn" data-number="3">3</button>
+                    <button class="number-btn" data-number="4">4</button>
+                    <button class="number-btn" data-number="5">5</button>
+                    <button class="number-btn" data-number="6">6</button>
+                    <button class="number-btn" data-number="7">7</button>
+                    <button class="number-btn" data-number="8">8</button>
+                    <button class="number-btn" data-number="9">9</button>
+                </div>
+                
+                <h2 class="input-title">Select Size</h2>
+                <div class="size-selection">
+                    <button class="size-btn big-btn" data-size="BIG">BIG</button>
+                    <button class="size-btn small-btn" data-size="SMALL">SMALL</button>
+                </div>
+                
+                <div class="selection-info">
+                    <p>You selected: <span class="selected-number">-</span> | <span class="selected-size">-</span></p>
+                </div>
+                
+                <div class="buttons">
+                    <button id="addBtn" class="action-btn">
+                        <i class="fas fa-plus-circle"></i> Add Result
+                    </button>
+                    <button id="clearBtn" class="action-btn">
+                        <i class="fas fa-trash"></i> Clear History
+                    </button>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="input-title">Results Display</h2>
+                <div class="result-display" id="currentResult">
+                    <!-- Results will be displayed here -->
+                    <div class="result-item number">7</div>
+                    <div class="result-item big">BIG</div>
+                </div>
+                
+                <h3 class="history-title">
+                    <i class="fas fa-history"></i> Results History
+                </h3>
+                <div class="history" id="history">
+                    <!-- History items will be added here -->
+                    <div class="history-item">
+                        <span>7 - BIG</span>
+                        <span>Just now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- (Rest of letters remain the same, omitted here for brevity) -->
-  </div>
 
-  <div id="quiz-section">
-    <h2>Quiz: Choose the correct sentence</h2>
-    <p><strong>Question:</strong> Which sentence is correct?</p>
-    <div class="quiz-option">
-      <input type="radio" id="qopt1" name="quiz" value="wrong" />
-      <label for="qopt1">He go to school.</label>
-    </div>
-    <div class="quiz-option">
-      <input type="radio" id="qopt2" name="quiz" value="correct" />
-      <label for="qopt2">He goes to school.</label>
-    </div>
-    <div class="quiz-option">
-      <input type="radio" id="qopt3" name="quiz" value="wrong" />
-      <label for="qopt3">He going school.</label>
-    </div>
-    <button onclick="checkQuiz()">Submit Answer</button>
-    <p id="quiz-result"></p>
-  </div>
-
-<script>
-  const showBtn = document.getElementById('showLettersBtn');
-  const lettersDiv = document.getElementById('letters');
-
-  showBtn.addEventListener('click', () => {
-    lettersDiv.style.display = 'block';
-    showBtn.style.display = 'none';
-  });
-
-  function checkQuiz() {
-    const options = document.getElementsByName('quiz');
-    const result = document.getElementById('quiz-result');
-    let selected = null;
-    for (const option of options) {
-      if(option.checked){
-        selected = option.value;
-        break;
-      }
-    }
-
-    if(selected === null){
-      result.textContent = "Please select an answer!";
-      result.style.color = "orange";
-      return;
-    }
-
-    if(selected === "correct"){
-      result.textContent = "Correct! Well done.";
-      result.className = "correct";
-    } else {
-      result.textContent = "Wrong! Try again.";
-      result.className = "wrong";
-    }
-  }
-</script>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const numberButtons = document.querySelectorAll('.number-btn');
+            const sizeButtons = document.querySelectorAll('.size-btn');
+            const addBtn = document.getElementById('addBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const currentResult = document.getElementById('currentResult');
+            const historyContainer = document.getElementById('history');
+            const selectedNumberEl = document.querySelector('.selected-number');
+            const selectedSizeEl = document.querySelector('.selected-size');
+            
+            let selectedNumber = null;
+            let selectedSize = null;
+            let history = [];
+            
+            // Number selection
+            numberButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    numberButtons.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedNumber = this.getAttribute('data-number');
+                    selectedNumberEl.textContent = selectedNumber;
+                });
+            });
+            
+            // Size selection
+            sizeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    sizeButtons.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedSize = this.getAttribute('data-size');
+                    selectedSizeEl.textContent = selectedSize;
+                });
+            });
+            
+            // Add result button event listener
+            addBtn.addEventListener('click', function() {
+                if (selectedNumber === null || selectedSize === null) {
+                    alert('Please select both a number and a size');
+                    return;
+                }
+                
+                // Add to history
+                const now = new Date();
+                const timeString = now.toLocaleTimeString();
+                history.unshift({ number: selectedNumber, size: selectedSize, time: timeString });
+                
+                // Update display with animation
+                updateResultDisplay(selectedNumber, selectedSize);
+                updateHistoryDisplay();
+                
+                // Create confetti effect
+                createConfetti();
+                
+                // Create firework effect for special numbers
+                if (selectedNumber === '7' || selectedNumber === '9') {
+                    createFireworks();
+                    showWinAnimation();
+                }
+                
+                // Reset selection
+                numberButtons.forEach(btn => btn.classList.remove('selected'));
+                sizeButtons.forEach(btn => btn.classList.remove('selected'));
+                selectedNumber = null;
+                selectedSize = null;
+                selectedNumberEl.textContent = '-';
+                selectedSizeEl.textContent = '-';
+            });
+            
+            // Clear history button event listener
+            clearBtn.addEventListener('click', function() {
+                history = [];
+                updateHistoryDisplay();
+            });
+            
+            // Update the result display with animation
+            function updateResultDisplay(number, size) {
+                currentResult.innerHTML = '';
+                
+                const numberElement = document.createElement('div');
+                numberElement.classList.add('result-item', 'number');
+                numberElement.textContent = number;
+                
+                const sizeElement = document.createElement('div');
+                sizeElement.classList.add('result-item', size.toLowerCase());
+                sizeElement.textContent = size;
+                
+                currentResult.appendChild(numberElement);
+                currentResult.appendChild(sizeElement);
+            }
+            
+            // Update the history display
+            function updateHistoryDisplay() {
+                historyContainer.innerHTML = '';
+                
+                history.forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.classList.add('history-item');
+                    
+                    const resultText = document.createElement('span');
+                    resultText.textContent = `${item.number} - ${item.size}`;
+                    
+                    const timeText = document.createElement('span');
+                    timeText.textContent = item.time;
+                    
+                    historyItem.appendChild(resultText);
+                    historyItem.appendChild(timeText);
+                    
+                    historyContainer.appendChild(historyItem);
+                });
+            }
+            
+            // Create confetti animation
+            function createConfetti() {
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    
+                    // Random position
+                    const left = Math.random() * 100;
+                    const top = Math.random() * 100;
+                    
+                    // Random color
+                    const colors = ['#ffce5c', '#ff8a00', '#e52e71', '#6a11cb', '#2575fc'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    confetti.style.left = `${left}%`;
+                    confetti.style.top = `${top}%`;
+                    confetti.style.background = color;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    // Animate confetti
+                    const animationDuration = Math.random() * 2 + 1;
+                    const animationDelay = Math.random() * 0.5;
+                    
+                    confetti.style.animation = `
+                        fadeIn 0.5s ease-out forwards,
+                        moveConfetti ${animationDuration}s ease-in ${animationDelay}s forwards
+                    `;
+                    
+                    // Remove confetti after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, (animationDelay + animationDuration) * 1000);
+                }
+                
+                // Add CSS for confetti movement
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes moveConfetti {
+                        0% {
+                            transform: translate(0, 0) rotate(0);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translate(
+                                ${Math.random() * 200 - 100}px, 
+                                ${Math.random() * 200 + 100}px
+                            ) rotate(${Math.random() * 360}deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Create fireworks animation
+            function createFireworks() {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const left = Math.random() * 70 + 15;
+                        const top = Math.random() * 50 + 10;
+                        
+                        for (let j = 0; j < 30; j++) {
+                            const firework = document.createElement('div');
+                            firework.classList.add('firework');
+                            
+                            // Random color
+                            const colors = ['#ffce5c', '#ff8a00', '#e52e71', '#6a11cb', '#2575fc'];
+                            const color = colors[Math.floor(Math.random() * colors.length)];
+                            
+                            firework.style.left = `${left}%`;
+                            firework.style.top = `${top}%`;
+                            firework.style.background = color;
+                            
+                            document.body.appendChild(firework);
+                            
+                            // Set random direction and distance
+                            const angle = Math.random() * Math.PI * 2;
+                            const distance = Math.random() * 100 + 50;
+                            const tx = Math.cos(angle) * distance;
+                            const ty = Math.sin(angle) * distance;
+                            
+                            firework.style.setProperty('--tx', `${tx}px`);
+                            firework.style.setProperty('--ty', `${ty}px`);
+                            
+                            // Animate firework
+                            firework.style.animation = `firework 0.8s ease-out forwards`;
+                            
+                            // Remove firework after animation
+                            setTimeout(() => {
+                                firework.remove();
+                            }, 800);
+                        }
+                    }, i * 300);
+                }
+            }
+            
+            // Show win animation
+            function showWinAnimation() {
+                const winText = document.createElement('div');
+                winText.classList.add('win-animation');
+                winText.textContent = 'Winner!';
+                
+                winText.style.left = '50%';
+                winText.style.top = '50%';
+                winText.style.transform = 'translate(-50%, -50%)';
+                
+                document.body.appendChild(winText);
+                
+                // Animate the text
+                winText.style.animation = 'fadeIn 0.5s ease-out forwards';
+                
+                // Remove after animation
+                setTimeout(() => {
+                    winText.style.animation = 'fadeOut 0.5s ease-in forwards';
+                    setTimeout(() => {
+                        winText.remove();
+                    }, 500);
+                }, 2000);
+            }
+            
+            // Initialize with a sample result
+            setTimeout(() => {
+                selectedNumber = '7';
+                selectedSize = 'BIG';
+                selectedNumberEl.textContent = '7';
+                selectedSizeEl.textContent = 'BIG';
+                
+                numberButtons.forEach(btn => {
+                    if (btn.getAttribute('data-number') === '7') {
+                        btn.classList.add('selected');
+                    }
+                });
+                
+                sizeButtons.forEach(btn => {
+                    if (btn.getAttribute('data-size') === 'BIG') {
+                        btn.classList.add('selected');
+                    }
+                });
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
