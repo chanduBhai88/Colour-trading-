@@ -80,35 +80,30 @@
             font-size: 1.5rem;
         }
         
-        .number-selection {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
+        .number-input-container {
             margin-bottom: 30px;
         }
         
-        .number-btn {
-            padding: 15px 0;
+        .number-input {
+            width: 100%;
+            padding: 15px;
             border: none;
             border-radius: 10px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: rgba(0, 0, 0, 0.3);
             color: white;
-            font-weight: bold;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 10px;
         }
         
-        .number-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        .number-input::placeholder {
+            color: #a0a0c0;
         }
         
-        .number-btn.selected {
-            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 65, 108, 0.5);
+        .input-note {
+            text-align: center;
+            color: #a0a0c0;
+            font-size: 0.9rem;
         }
         
         .size-selection {
@@ -173,14 +168,14 @@
             gap: 10px;
         }
         
-        #addBtn {
-            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+        #calculateBtn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             color: white;
         }
         
-        #addBtn:hover {
+        #calculateBtn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.4);
+            box-shadow: 0 5px 15px rgba(38, 117, 252, 0.4);
         }
         
         #clearBtn {
@@ -385,48 +380,53 @@
                 opacity: 0;
             }
         }
+        
+        .calculation-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #a0a0c0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>BIG SMALL GAME</h1>
-            <p class="subtitle">Select a number and size to see animated results</p>
+            <p class="subtitle">Enter a 7-digit number and select size to calculate results</p>
         </header>
         
         <div class="game-container">
             <div class="input-section">
-                <h2 class="input-title">Select Your Number</h2>
-                <div class="number-selection">
-                    <button class="number-btn" data-number="0">0</button>
-                    <button class="number-btn" data-number="1">1</button>
-                    <button class="number-btn" data-number="2">2</button>
-                    <button class="number-btn" data-number="3">3</button>
-                    <button class="number-btn" data-number="4">4</button>
-                    <button class="number-btn" data-number="5">5</button>
-                    <button class="number-btn" data-number="6">6</button>
-                    <button class="number-btn" data-number="7">7</button>
-                    <button class="number-btn" data-number="8">8</button>
-                    <button class="number-btn" data-number="9">9</button>
+                <h2 class="input-title">Enter 7-Digit Number</h2>
+                <div class="number-input-container">
+                    <input type="text" class="number-input" id="numberInput" placeholder="Enter 7 digits" maxlength="7">
+                    <p class="input-note">Please enter exactly 7 digits (0-9)</p>
                 </div>
                 
-                <h2 class="input-title">Select Size</h2>
+                <h2 class="input-title">Select Your Prediction</h2>
                 <div class="size-selection">
                     <button class="size-btn big-btn" data-size="BIG">BIG</button>
                     <button class="size-btn small-btn" data-size="SMALL">SMALL</button>
                 </div>
                 
                 <div class="selection-info">
-                    <p>You selected: <span class="selected-number">-</span> | <span class="selected-size">-</span></p>
+                    <p>You entered: <span class="selected-number">-</span> | Prediction: <span class="selected-size">-</span></p>
                 </div>
                 
                 <div class="buttons">
-                    <button id="addBtn" class="action-btn">
-                        <i class="fas fa-plus-circle"></i> Add Result
+                    <button id="calculateBtn" class="action-btn">
+                        <i class="fas fa-calculator"></i> Calculate
                     </button>
                     <button id="clearBtn" class="action-btn">
                         <i class="fas fa-trash"></i> Clear History
                     </button>
+                </div>
+                
+                <div class="calculation-info">
+                    <p><strong>How it works:</strong> The 7-digit number is processed to generate a result between 0-9. If the result is 5-9, it's BIG. If it's 0-4, it's SMALL.</p>
                 </div>
             </div>
             
@@ -434,8 +434,8 @@
                 <h2 class="input-title">Results Display</h2>
                 <div class="result-display" id="currentResult">
                     <!-- Results will be displayed here -->
-                    <div class="result-item number">7</div>
-                    <div class="result-item big">BIG</div>
+                    <div class="result-item number">-</div>
+                    <div class="result-item">-</div>
                 </div>
                 
                 <h3 class="history-title">
@@ -443,10 +443,6 @@
                 </h3>
                 <div class="history" id="history">
                     <!-- History items will be added here -->
-                    <div class="history-item">
-                        <span>7 - BIG</span>
-                        <span>Just now</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -454,27 +450,25 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const numberButtons = document.querySelectorAll('.number-btn');
+            const numberInput = document.getElementById('numberInput');
             const sizeButtons = document.querySelectorAll('.size-btn');
-            const addBtn = document.getElementById('addBtn');
+            const calculateBtn = document.getElementById('calculateBtn');
             const clearBtn = document.getElementById('clearBtn');
             const currentResult = document.getElementById('currentResult');
             const historyContainer = document.getElementById('history');
             const selectedNumberEl = document.querySelector('.selected-number');
             const selectedSizeEl = document.querySelector('.selected-size');
             
-            let selectedNumber = null;
             let selectedSize = null;
             let history = [];
             
-            // Number selection
-            numberButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    numberButtons.forEach(btn => btn.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedNumber = this.getAttribute('data-number');
-                    selectedNumberEl.textContent = selectedNumber;
-                });
+            // Validate number input to only allow digits
+            numberInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                if (this.value.length > 7) {
+                    this.value = this.value.slice(0, 7);
+                }
+                selectedNumberEl.textContent = this.value || '-';
             });
             
             // Size selection
@@ -487,37 +481,55 @@
                 });
             });
             
-            // Add result button event listener
-            addBtn.addEventListener('click', function() {
-                if (selectedNumber === null || selectedSize === null) {
-                    alert('Please select both a number and a size');
+            // Calculate button event listener
+            calculateBtn.addEventListener('click', function() {
+                const inputNumber = numberInput.value;
+                
+                if (inputNumber.length !== 7) {
+                    alert('Please enter exactly 7 digits');
                     return;
                 }
+                
+                if (selectedSize === null) {
+                    alert('Please select a size prediction');
+                    return;
+                }
+                
+                // Calculate the result
+                const calculatedResult = calculateResult(inputNumber);
+                const resultSize = calculatedResult >= 5 ? 'BIG' : 'SMALL';
+                const isWin = resultSize === selectedSize;
                 
                 // Add to history
                 const now = new Date();
                 const timeString = now.toLocaleTimeString();
-                history.unshift({ number: selectedNumber, size: selectedSize, time: timeString });
+                history.unshift({ 
+                    input: inputNumber, 
+                    result: calculatedResult, 
+                    size: resultSize, 
+                    prediction: selectedSize,
+                    isWin: isWin,
+                    time: timeString 
+                });
                 
                 // Update display with animation
-                updateResultDisplay(selectedNumber, selectedSize);
+                updateResultDisplay(calculatedResult, resultSize, isWin);
                 updateHistoryDisplay();
                 
-                // Create confetti effect
-                createConfetti();
-                
-                // Create firework effect for special numbers
-                if (selectedNumber === '7' || selectedNumber === '9') {
-                    createFireworks();
-                    showWinAnimation();
+                // Create confetti effect for win
+                if (isWin) {
+                    createConfetti();
+                    
+                    // Create firework effect for special numbers
+                    if (calculatedResult === 7 || calculatedResult === 9) {
+                        createFireworks();
+                        showWinAnimation();
+                    }
                 }
                 
                 // Reset selection
-                numberButtons.forEach(btn => btn.classList.remove('selected'));
                 sizeButtons.forEach(btn => btn.classList.remove('selected'));
-                selectedNumber = null;
                 selectedSize = null;
-                selectedNumberEl.textContent = '-';
                 selectedSizeEl.textContent = '-';
             });
             
@@ -525,10 +537,27 @@
             clearBtn.addEventListener('click', function() {
                 history = [];
                 updateHistoryDisplay();
+                currentResult.innerHTML = '<div class="result-item number">-</div><div class="result-item">-</div>';
             });
             
+            // Calculate result from 7-digit number
+            function calculateResult(input) {
+                // Convert input to array of digits
+                const digits = input.split('').map(Number);
+                
+                // Calculate sum of digits
+                let sum = digits.reduce((acc, digit) => acc + digit, 0);
+                
+                // If sum is more than one digit, sum again until single digit
+                while (sum > 9) {
+                    sum = Math.floor(sum / 10) + (sum % 10);
+                }
+                
+                return sum;
+            }
+            
             // Update the result display with animation
-            function updateResultDisplay(number, size) {
+            function updateResultDisplay(number, size, isWin) {
                 currentResult.innerHTML = '';
                 
                 const numberElement = document.createElement('div');
@@ -538,6 +567,11 @@
                 const sizeElement = document.createElement('div');
                 sizeElement.classList.add('result-item', size.toLowerCase());
                 sizeElement.textContent = size;
+                
+                if (isWin) {
+                    numberElement.style.boxShadow = '0 0 25px rgba(0, 255, 0, 0.5)';
+                    sizeElement.style.boxShadow = '0 0 25px rgba(0, 255, 0, 0.5)';
+                }
                 
                 currentResult.appendChild(numberElement);
                 currentResult.appendChild(sizeElement);
@@ -551,8 +585,14 @@
                     const historyItem = document.createElement('div');
                     historyItem.classList.add('history-item');
                     
+                    if (item.isWin) {
+                        historyItem.style.borderLeft = '5px solid #2ecc71';
+                    } else {
+                        historyItem.style.borderLeft = '5px solid #ff416c';
+                    }
+                    
                     const resultText = document.createElement('span');
-                    resultText.textContent = `${item.number} - ${item.size}`;
+                    resultText.innerHTML = `<strong>${item.input}</strong> → ${item.result} (${item.size}) | Prediction: ${item.prediction} `;
                     
                     const timeText = document.createElement('span');
                     timeText.textContent = item.time;
@@ -589,8 +629,8 @@
                     const animationDelay = Math.random() * 0.5;
                     
                     confetti.style.animation = `
-                        fadeIn 0.5s ease-out forwards,
-                        moveConfetti ${animationDuration}s ease-in ${animationDelay}s forwards
+                        fadeIn 0.5s ease-out,
+                        moveConfetti ${animationDuration}s ease-out ${animationDelay}s forwards
                     `;
                     
                     // Remove confetti after animation
@@ -598,66 +638,44 @@
                         confetti.remove();
                     }, (animationDelay + animationDuration) * 1000);
                 }
-                
-                // Add CSS for confetti movement
-                const style = document.createElement('style');
-                style.textContent = `
-                    @keyframes moveConfetti {
-                        0% {
-                            transform: translate(0, 0) rotate(0);
-                            opacity: 1;
-                        }
-                        100% {
-                            transform: translate(
-                                ${Math.random() * 200 - 100}px, 
-                                ${Math.random() * 200 + 100}px
-                            ) rotate(${Math.random() * 360}deg);
-                            opacity: 0;
-                        }
-                    }
-                `;
-                document.head.appendChild(style);
             }
             
             // Create fireworks animation
             function createFireworks() {
-                for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < 20; i++) {
+                    const firework = document.createElement('div');
+                    firework.classList.add('firework');
+                    
+                    // Random position
+                    const left = 30 + Math.random() * 40;
+                    const top = 30 + Math.random() * 40;
+                    
+                    // Random color
+                    const colors = ['#ffce5c', '#ff8a00', '#e52e71', '#6a11cb', '#2575fc'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    firework.style.left = `${left}%`;
+                    firework.style.top = `${top}%`;
+                    firework.style.background = color;
+                    
+                    document.body.appendChild(firework);
+                    
+                    // Random direction and distance
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 20 + Math.random() * 30;
+                    const tx = Math.cos(angle) * distance;
+                    const ty = Math.sin(angle) * distance;
+                    
+                    firework.style.setProperty('--tx', `${tx}vw`);
+                    firework.style.setProperty('--ty', `${ty}vh`);
+                    
+                    // Animate firework
+                    firework.style.animation = `firework 1s ease-out forwards`;
+                    
+                    // Remove firework after animation
                     setTimeout(() => {
-                        const left = Math.random() * 70 + 15;
-                        const top = Math.random() * 50 + 10;
-                        
-                        for (let j = 0; j < 30; j++) {
-                            const firework = document.createElement('div');
-                            firework.classList.add('firework');
-                            
-                            // Random color
-                            const colors = ['#ffce5c', '#ff8a00', '#e52e71', '#6a11cb', '#2575fc'];
-                            const color = colors[Math.floor(Math.random() * colors.length)];
-                            
-                            firework.style.left = `${left}%`;
-                            firework.style.top = `${top}%`;
-                            firework.style.background = color;
-                            
-                            document.body.appendChild(firework);
-                            
-                            // Set random direction and distance
-                            const angle = Math.random() * Math.PI * 2;
-                            const distance = Math.random() * 100 + 50;
-                            const tx = Math.cos(angle) * distance;
-                            const ty = Math.sin(angle) * distance;
-                            
-                            firework.style.setProperty('--tx', `${tx}px`);
-                            firework.style.setProperty('--ty', `${ty}px`);
-                            
-                            // Animate firework
-                            firework.style.animation = `firework 0.8s ease-out forwards`;
-                            
-                            // Remove firework after animation
-                            setTimeout(() => {
-                                firework.remove();
-                            }, 800);
-                        }
-                    }, i * 300);
+                        firework.remove();
+                    }, 1000);
                 }
             }
             
@@ -665,45 +683,24 @@
             function showWinAnimation() {
                 const winText = document.createElement('div');
                 winText.classList.add('win-animation');
-                winText.textContent = 'Winner!';
-                
+                winText.textContent = 'WIN!';
                 winText.style.left = '50%';
                 winText.style.top = '50%';
                 winText.style.transform = 'translate(-50%, -50%)';
                 
                 document.body.appendChild(winText);
                 
-                // Animate the text
+                // Animate win text
                 winText.style.animation = 'fadeIn 0.5s ease-out forwards';
                 
-                // Remove after animation
+                // Remove win text after animation
                 setTimeout(() => {
-                    winText.style.animation = 'fadeOut 0.5s ease-in forwards';
+                    winText.style.animation = 'fadeIn 0.5s ease-out reverse forwards';
                     setTimeout(() => {
                         winText.remove();
                     }, 500);
                 }, 2000);
             }
-            
-            // Initialize with a sample result
-            setTimeout(() => {
-                selectedNumber = '7';
-                selectedSize = 'BIG';
-                selectedNumberEl.textContent = '7';
-                selectedSizeEl.textContent = 'BIG';
-                
-                numberButtons.forEach(btn => {
-                    if (btn.getAttribute('data-number') === '7') {
-                        btn.classList.add('selected');
-                    }
-                });
-                
-                sizeButtons.forEach(btn => {
-                    if (btn.getAttribute('data-size') === 'BIG') {
-                        btn.classList.add('selected');
-                    }
-                });
-            }, 1000);
         });
     </script>
 </body>
