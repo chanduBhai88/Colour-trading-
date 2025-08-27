@@ -3,577 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KWG Game Predictor</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Lottery Prediction Tool</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         body {
-            background: linear-gradient(135deg, #1a1f25 0%, #0d1014 100%);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f4f4f9;
         }
-        
         .container {
-            width: 100%;
-            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 300px;
             margin: 0 auto;
         }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: #ffcc00;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
-        }
-        
-        .tagline {
-            font-size: 1.2rem;
-            color: #aaa;
-            margin-bottom: 20px;
-        }
-        
-        .input-section {
-            background: rgba(25, 30, 36, 0.8);
-            padding: 25px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 20px;
-        }
-        
-        label {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: #ffcc00;
-        }
-        
-        .digit-inputs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .digit-inputs input {
-            width: 50px;
-            height: 60px;
-            text-align: center;
-            font-size: 2rem;
-            font-weight: bold;
-            border: 2px solid #444;
-            border-radius: 8px;
-            background: #111;
-            color: #fff;
-            transition: all 0.3s;
-        }
-        
-        .digit-inputs input:focus {
-            border-color: #ffcc00;
-            box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
-            outline: none;
-            transform: scale(1.05);
-        }
-        
-        .buttons {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
         button {
-            padding: 15px 25px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .calculate-btn {
-            background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
-            color: #000;
-            flex: 1;
-        }
-        
-        .calculate-btn:hover {
-            background: linear-gradient(135deg, #ff9900 0%, #ffcc00 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 153, 0, 0.4);
-        }
-        
-        .clear-btn {
-            background: linear-gradient(135deg, #ff4d4d 0%, #cc0000 100%);
+            background: #ff6b6b;
             color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        
-        .clear-btn:hover {
-            background: linear-gradient(135deg, #cc0000 0%, #ff4d4d 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(204, 0, 0, 0.4);
-        }
-        
-        .result-section {
-            background: rgba(25, 30, 36, 0.8);
-            padding: 30px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            text-align: center;
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .result-placeholder {
-            font-size: 1.2rem;
-            color: #888;
-        }
-        
-        .result-content {
-            display: none;
-            text-align: center;
-        }
-        
-        .result-number {
-            font-size: 6rem;
-            font-weight: bold;
+        #result {
+            font-size: 24px;
             margin: 20px 0;
-            color: #ffcc00;
-            text-shadow: 0 0 20px rgba(255, 204, 0, 0.7);
-        }
-        
-        .result-details {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-        }
-        
-        .result-detail {
-            padding: 15px 25px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            min-width: 120px;
-        }
-        
-        .detail-value {
-            font-size: 1.8rem;
             font-weight: bold;
-            margin-top: 5px;
         }
-        
-        .big {
-            color: #4cd964;
-        }
-        
-        .small {
-            color: #ff3b30;
-        }
-        
-        .memory-section {
-            background: rgba(25, 30, 36, 0.8);
-            padding: 25px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .memory-section h2 {
-            margin-bottom: 15px;
-            color: #ffcc00;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .memory-list {
-            max-height: 200px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            padding: 15px;
-        }
-        
-        .memory-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #333;
-        }
-        
-        .memory-item:last-child {
-            border-bottom: none;
-        }
-        
-        /* Animation */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes glow {
-            0% { text-shadow: 0 0 10px rgba(255, 204, 0, 0.7); }
-            50% { text-shadow: 0 0 30px rgba(255, 204, 0, 0.9); }
-            100% { text-shadow: 0 0 10px rgba(255, 204, 0, 0.7); }
-        }
-        
-        .animate-result {
-            animation: pulse 0.5s ease-in-out 3, glow 2s ease-in-out infinite;
-        }
-        
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        .particle {
-            position: absolute;
-            background: #ffcc00;
+        .color-box {
+            width: 50px;
+            height: 50px;
+            margin: 10px auto;
             border-radius: 50%;
-            opacity: 0;
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: auto;
-            padding: 20px;
-            color: #888;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 600px) {
-            .digit-inputs input {
-                width: 40px;
-                height: 50px;
-                font-size: 1.5rem;
-            }
-            
-            .result-number {
-                font-size: 4rem;
-            }
-            
-            .result-details {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .buttons {
-                flex-direction: column;
-            }
+            border: 2px solid #333;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>KWG Game Predictor</h1>
-            <p class="tagline">Enter 7 digits to predict the next result</p>
-        </header>
-        
-        <section class="input-section">
-            <div class="input-group">
-                <label for="digits">Enter 7 Digits:</label>
-                <div class="digit-inputs">
-                    <input type="number" min="0" max="9" maxlength="1" class="digit" oninput="moveToNext(this)">
-                    <input type="number" min="0" max="9" maxlength="1" class="digit" oninput="moveToNext(this)">
-                    <input type="number" min="0" max="9" maxlength="1" class="digit" oninput="moveToNext(this)">
-                    <input type="number" min="0" max="9" maxlength="1" class="digit" oninput="moveToNext(this)">
-                    <input type="number" min="0" max="9" maxlength="1" class="digit" oninput="moveToNext(this)">
-                    <input type="number" min="0" max="9" maxlength="1" class="digit" oninput="moveToNext(this)">
-                    <input type="number" min="0" max="9" maxlength="1" class="digit" oninput="moveToNext(this)">
-                </div>
-            </div>
-            
-            <div class="buttons">
-                <button class="calculate-btn" onclick="calculateResult()">
-                    <i class="fas fa-calculator"></i> Calculate Result
-                </button>
-                <button class="clear-btn" onclick="clearInputs()">
-                    <i class="fas fa-trash"></i> Clear
-                </button>
-            </div>
-        </section>
-        
-        <section class="result-section">
-            <div class="particles" id="particles"></div>
-            
-            <div class="result-placeholder" id="resultPlaceholder">
-                <i class="fas fa-dice" style="font-size: 3rem; margin-bottom: 20px; color: #555;"></i>
-                <p>Enter 7 digits and click "Calculate Result" to see the prediction</p>
-            </div>
-            
-            <div class="result-content" id="resultContent">
-                <h2>Predicted Result</h2>
-                <div class="result-number" id="resultNumber">0</div>
-                <div class="result-details">
-                    <div class="result-detail">
-                        <div>Big/Small</div>
-                        <div class="detail-value" id="sizeResult">-</div>
-                    </div>
-                    <div class="result-detail">
-                        <div>Color</div>
-                        <div class="detail-value" id="colorResult">-</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <section class="memory-section">
-            <h2><i class="fas fa-history"></i> Result Memory (Last 10)</h2>
-            <div class="memory-list" id="memoryList">
-                <div class="memory-item">No results yet</div>
-            </div>
-        </section>
+        <h2>Lottery Prediction Tool</h2>
+        <p>Press the button to get a random prediction:</p>
+        <button onclick="predict()">Predict Now</button>
+        <div id="result">--</div>
+        <div class="color-box" id="colorBox"></div>
     </div>
-    
-    <footer>
-        <p>KWG Game Predictor &copy; 2025 | For entertainment purposes only</p>
-    </footer>
 
     <script>
-        // Move to next input when a digit is entered
-        function moveToNext(input) {
-            if (input.value.length > 0) {
-                const next = input.nextElementSibling;
-                if (next && next.classList.contains('digit')) {
-                    next.focus();
-                }
-            }
+        function predict() {
+            // Random number between 0-9
+            const number = Math.floor(Math.random() * 10);
+            // Big/Small logic
+            const size = number >= 5 ? "Big" : "Small";
+            // Random color
+            const colors = ["Green", "Red", "Purple"];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            // Update UI
+            document.getElementById('result').innerHTML =
+                `Number: ${number}<br>Size: ${size}<br>Color: ${color}`;
+            // Update color box
+            const colorBox = document.getElementById('colorBox');
+            colorBox.style.backgroundColor =
+                color === "Green" ? "#4CAF50" :
+                color === "Red" ? "#F44336" : "#9C27B0";
         }
-        
-        // Clear all inputs
-        function clearInputs() {
-            const inputs = document.querySelectorAll('.digit');
-            inputs.forEach(input => {
-                input.value = '';
-            });
-            inputs[0].focus();
-        }
-        
-        // Calculate result based on inputs
-        function calculateResult() {
-            const digits = Array.from(document.querySelectorAll('.digit')).map(input => {
-                return parseInt(input.value) || 0;
-            });
-            
-            // Check if all digits are filled
-            if (digits.some(d => isNaN(d))) {
-                alert('Please enter all 7 digits');
-                return;
-            }
-            
-            // Simple algorithm to generate result (for demonstration)
-            const sum = digits.reduce((a, b) => a + b, 0);
-            const result = sum % 10;
-            
-            // Determine Big/Small (Big: 5-9, Small: 0-4)
-            const size = result >= 5 ? 'Big' : 'Small';
-            
-            // Determine Color (based on even/odd)
-            const color = result % 2 === 0 ? 'Red' : 'Blue';
-            
-            // Display result with animation
-            displayResult(result, size, color);
-            
-            // Add to memory
-            addToMemory(digits.join(''), result, size, color);
-        }
-        
-        // Display result with animation
-        function displayResult(number, size, color) {
-            const placeholder = document.getElementById('resultPlaceholder');
-            const content = document.getElementById('resultContent');
-            const resultNumber = document.getElementById('resultNumber');
-            const sizeResult = document.getElementById('sizeResult');
-            const colorResult = document.getElementById('colorResult');
-            
-            // Update values
-            resultNumber.textContent = number;
-            sizeResult.textContent = size;
-            sizeResult.className = 'detail-value ' + size.toLowerCase();
-            colorResult.textContent = color;
-            
-            // Show content, hide placeholder
-            placeholder.style.display = 'none';
-            content.style.display = 'block';
-            
-            // Add animation
-            resultNumber.classList.add('animate-result');
-            
-            // Create particles
-            createParticles();
-            
-            // Remove animation after 3 seconds
-            setTimeout(() => {
-                resultNumber.classList.remove('animate-result');
-            }, 3000);
-        }
-        
-        // Create celebration particles
-        function createParticles() {
-            const particles = document.getElementById('particles');
-            particles.innerHTML = '';
-            
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                // Random properties
-                const size = Math.random() * 10 + 2;
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                const delay = Math.random() * 0.5;
-                const duration = Math.random() * 1 + 1;
-                
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${posX}%`;
-                particle.style.top = `${posY}%`;
-                particle.style.animation = `
-                    fadeIn 0.5s ease-in-out ${delay}s forwards,
-                    moveParticle ${duration}s ease-in-out ${delay}s forwards
-                `;
-                
-                // Random color from gold to orange
-                const hue = Math.random() * 20 + 40; // 40-60 (yellow to orange)
-                particle.style.background = `hsl(${hue}, 100%, 60%)`;
-                
-                particles.appendChild(particle);
-            }
-            
-            // Add keyframes for animation
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 0.8; }
-                }
-                
-                @keyframes moveParticle {
-                    from { transform: translate(0, 0) rotate(0deg); }
-                    to { 
-                        transform: translate(
-                            ${Math.random() * 100 - 50}px, 
-                            ${Math.random() * 100 - 50}px
-                        ) rotate(360deg); 
-                        opacity: 0;
-                    }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        // Store results in memory (last 10)
-        let resultMemory = [];
-        
-        function addToMemory(digits, number, size, color) {
-            // Add to memory array
-            resultMemory.unshift({
-                digits,
-                number,
-                size,
-                color,
-                timestamp: new Date().toLocaleTimeString()
-            });
-            
-            // Keep only last 10 results
-            if (resultMemory.length > 10) {
-                resultMemory.pop();
-            }
-            
-            // Update memory display
-            updateMemoryDisplay();
-        }
-        
-        function updateMemoryDisplay() {
-            const memoryList = document.getElementById('memoryList');
-            
-            if (resultMemory.length === 0) {
-                memoryList.innerHTML = '<div class="memory-item">No results yet</div>';
-                return;
-            }
-            
-            memoryList.innerHTML = '';
-            resultMemory.forEach((result, index) => {
-                const item = document.createElement('div');
-                item.className = 'memory-item';
-                item.innerHTML = `
-                    <div>#${index + 1}: ${result.digits} → ${result.number}</div>
-                    <div>${result.size} | ${result.color}</div>
-                `;
-                memoryList.appendChild(item);
-            });
-        }
-        
-        // Allow only digits 0-9 in inputs
-        document.querySelectorAll('.digit').forEach(input => {
-            input.addEventListener('input', function() {
-                if (this.value.length > 1) {
-                    this.value = this.value.slice(0, 1);
-                }
-                if (this.value < 0) this.value = 0;
-                if (this.value > 9) this.value = 9;
-            });
-            
-            input.addEventListener('keydown', function(e) {
-                // Allow backspace, delete, tab, arrows
-                if ([8, 9, 37, 39, 46].includes(e.keyCode)) {
-                    return;
-                }
-                
-                // Prevent non-numeric input
-                if (e.keyCode < 48 || e.keyCode > 57) {
-                    if (e.keyCode < 96 || e.keyCode > 105) {
-                        e.preventDefault();
-                    }
-                }
-            });
-        });
-        
-        // Auto-focus first input on load
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.digit').focus();
-        });
     </script>
 </body>
 </html>
