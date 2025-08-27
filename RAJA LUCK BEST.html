@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raja Luck - Powerful Calculation Mode</title>
+    <title>RajaGame Predictor</title>
     <style>
         * {
             margin: 0;
@@ -13,49 +13,33 @@
         }
         
         body {
-            background-color: #121212;
+            background-color: #000;
             color: white;
             padding: 20px;
+            background-image: url('https://images.unsplash.com/photo-1549375976-7d1c8a3e6f9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #1e1e1e;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(255, 0, 128, 0.5);
             position: relative;
             overflow: hidden;
         }
         
         .header {
             text-align: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #c90000;
-            border-radius: 10px;
+            margin-bottom: 30px;
             position: relative;
-            overflow: hidden;
-        }
-        
-        .header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #ff0000, #cc0000, #ff0000);
-            animation: gradientMove 3s ease infinite;
-            z-index: 1;
-            opacity: 0.7;
-        }
-        
-        .header-content {
-            position: relative;
-            z-index: 2;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
         }
         
         .title {
@@ -64,134 +48,90 @@
             color: white;
             text-transform: uppercase;
             letter-spacing: 2px;
-        }
-        
-        .subtitle {
-            font-size: 1rem;
-            color: #f0f0f0;
-            margin-top: 5px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.8);
         }
         
         .input-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
             margin-bottom: 20px;
+        }
+        
+        .input-field {
             position: relative;
-        }
-        
-        .input-area {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        
-        .digit-input {
-            width: 45px;
-            height: 60px;
-            background-color: #333;
-            border: 2px solid #666;
+            height: 50px;
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
             overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 0, 128, 0.3);
+            transition: all 0.3s ease;
         }
         
-        .digit-input:hover {
-            background-color: #444;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        .input-field:hover {
+            border-color: rgba(255, 0, 128, 0.8);
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.3);
         }
         
-        .digit-input.active {
-            background-color: #c90000;
-            border-color: #ff3333;
-        }
-        
-        .digit-input span {
-            position: relative;
-            z-index: 1;
-        }
-        
-        .digit-input::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
+        .input-field select {
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 0, 0, 0.3), transparent);
-            animation: pulse 2s ease-in-out infinite;
-            z-index: 0;
-        }
-        
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0 15px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" fill="white"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
         }
         
         .btn {
-            padding: 12px 20px;
+            width: 100%;
+            padding: 15px;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 10px;
+            font-size: 1.2rem;
             font-weight: bold;
+            color: white;
+            background-color: #ff0080;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            min-width: 100px;
+            margin-bottom: 20px;
         }
         
-        .btn.clear {
-            background-color: #666;
-            color: white;
-            border: 2px solid #444;
+        .btn:hover {
+            background-color: #ff00b0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 128, 0.4);
         }
         
-        .btn.clear:hover {
-            background-color: #888;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-        }
-        
-        .btn.analyze {
-            background-color: #c90000;
-            color: white;
-            border: 2px solid #990000;
-        }
-        
-        .btn.analyze:hover {
-            background-color: #ff3333;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-        }
-        
-        .btn.analyze:active {
-            transform: scale(0.95);
+        .btn:active {
+            transform: translateY(0);
         }
         
         .result-section {
             margin-bottom: 20px;
             display: none;
+            text-align: center;
         }
         
         .result-title {
-            text-align: center;
             font-size: 1.5rem;
             margin-bottom: 15px;
-            color: #c90000;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            color: #ff0080;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
         }
         
         .result-display {
-            background-color: #222;
+            background-color: rgba(255, 0, 128, 0.2);
             border-radius: 10px;
             padding: 20px;
             min-height: 80px;
@@ -199,9 +139,9 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: #fff;
+            color: #ff0080;
             position: relative;
             overflow: hidden;
         }
@@ -213,7 +153,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 0, 0, 0.2), transparent);
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 128, 0.3), transparent);
             animation: glow 2s ease-in-out infinite;
             z-index: 1;
         }
@@ -221,22 +161,22 @@
         .result-display span {
             position: relative;
             z-index: 2;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.8);
         }
         
         .history-section {
             margin-bottom: 20px;
-            background-color: #222;
+            background-color: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             padding: 15px;
-            max-height: 300px;
+            max-height: 200px;
             overflow-y: auto;
         }
         
         .history-title {
             font-size: 1.2rem;
             margin-bottom: 10px;
-            color: #c90000;
+            color: #ff0080;
             text-align: center;
         }
         
@@ -244,7 +184,7 @@
             display: flex;
             justify-content: space-between;
             padding: 10px 0;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid rgba(255, 0, 128, 0.3);
             font-size: 0.9rem;
         }
         
@@ -260,122 +200,18 @@
             color: #00ff00;
         }
         
-        .animation-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-        
-        .khatarnak-animation {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            background-color: #c90000;
-            border-radius: 50%;
-            overflow: hidden;
-            animation: khatarnakEffect 2s ease-in-out infinite alternate;
-        }
-        
-        .khatarnak-animation::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="%23ff0000" stroke-width="4"/><path d="M50,10 L50,90 M10,50 L90,50" stroke="%23ff0000" stroke-width="4"/></svg>');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            animation: spin 2s linear infinite;
-        }
-        
-        .khatarnak-animation::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.8) 0%, rgba(255, 0, 0, 0) 70%);
-            animation: pulse 2s ease-in-out infinite;
-            z-index: 1;
-        }
-        
-        .khatarnak-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
-            animation: textBounce 2s ease-in-out infinite;
-            z-index: 2;
-        }
-        
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-        
         @keyframes glow {
             0%, 100% { opacity: 0.3; }
             50% { opacity: 0.8; }
         }
         
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        @keyframes khatarnakEffect {
-            0% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-        }
-        
-        @keyframes textBounce {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.2); }
-        }
-        
         @media (max-width: 600px) {
             .container {
-                padding: 10px;
+                padding: 20px;
             }
             
-            .digit-input {
-                width: 40px;
-                height: 50px;
-                font-size: 1.2rem;
-            }
-            
-            .result-display {
-                font-size: 1.8rem;
+            .input-section {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -383,144 +219,178 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="header-content">
-                <h1 class="title">Raja Luck</h1>
-                <p class="subtitle">Powerful Calculation Mode</p>
-            </div>
+            <h1 class="title">❤️ RajaGame Predictor</h1>
         </div>
 
         <div class="input-section">
-            <div class="input-area">
-                <div class="digit-input" data-value="0">0</div>
-                <div class="digit-input" data-value="1">1</div>
-                <div class="digit-input" data-value="2">2</div>
-                <div class="digit-input" data-value="3">3</div>
-                <div class="digit-input" data-value="4">4</div>
-                <div class="digit-input" data-value="5">5</div>
-                <div class="digit-input" data-value="6">6</div>
-                <div class="digit-input" data-value="7">7</div>
-                <div class="digit-input" data-value="8">8</div>
-                <div class="digit-input" data-value="9">9</div>
+            <div class="input-field">
+                <select id="input1">
+                    <option value="">--</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+            </div>
+            <div class="input-field">
+                <select id="input2">
+                    <option value="">--</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+            </div>
+            <div class="input-field">
+                <select id="input3">
+                    <option value="">--</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+            </div>
+            <div class="input-field">
+                <select id="input4">
+                    <option value="">--</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+            </div>
+            <div class="input-field">
+                <select id="input5">
+                    <option value="">--</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+            </div>
+            <div class="input-field">
+                <select id="input6">
+                    <option value="">--</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
             </div>
         </div>
 
-        <div class="controls">
-            <button class="btn clear">Clear</button>
-            <button class="btn analyze">Analyze</button>
-        </div>
+        <button class="btn" id="predictBtn">🔮 Predict Next</button>
 
         <div class="result-section" id="resultSection">
-            <h2 class="result-title">Analysis Result</h2>
+            <h2 class="result-title">Prediction Result</h2>
             <div class="result-display" id="resultDisplay">Result will appear here</div>
         </div>
 
         <div class="history-section">
-            <h3 class="history-title">Memory History</h3>
+            <h3 class="history-title">🧠 Last 5 Predictions:</h3>
             <div id="historyList"></div>
-        </div>
-    </div>
-
-    <div class="animation-container" id="animationContainer">
-        <div class="khatarnak-animation">
-            <div class="khatarnak-text">KHA-TAR-NAK</div>
         </div>
     </div>
 
     <script>
         // DOM Elements
-        const digitInputs = document.querySelectorAll('.digit-input');
-        const clearBtn = document.querySelector('.clear');
-        const analyzeBtn = document.querySelector('.analyze');
+        const inputs = document.querySelectorAll('.input-field select');
+        const predictBtn = document.getElementById('predictBtn');
         const resultSection = document.getElementById('resultSection');
         const resultDisplay = document.getElementById('resultDisplay');
         const historyList = document.getElementById('historyList');
-        const animationContainer = document.getElementById('animationContainer');
 
-        // Store current input digits
-        let currentDigits = [];
-        let analysisHistory = [];
+        // Store current input values
+        let currentValues = [];
 
-        // Add click event to digit inputs
-        digitInputs.forEach(input => {
-            input.addEventListener('click', () => {
-                // Clear previous active state
-                digitInputs.forEach(digit => digit.classList.remove('active'));
+        // Add change event to inputs
+        inputs.forEach(input => {
+            input.addEventListener('change', () => {
+                // Update current values
+                currentValues = Array.from(inputs).map(input => input.value);
                 
-                // Set current as active
-                input.classList.add('active');
-                
-                // Update current digits
-                const value = parseInt(input.getAttribute('data-value'));
-                if (currentDigits.length < 7) {
-                    currentDigits.push(value);
+                // Enable/disable predict button based on input
+                if (currentValues.filter(val => val !== '').length === 6) {
+                    predictBtn.disabled = false;
                 } else {
-                    // Replace last digit
-                    currentDigits[currentDigits.length - 1] = value;
+                    predictBtn.disabled = true;
                 }
-                
-                // Update display
-                updateDigitDisplay();
             });
         });
 
-        // Clear button functionality
-        clearBtn.addEventListener('click', () => {
-            currentDigits = [];
-            digitInputs.forEach(digit => digit.classList.remove('active'));
-            updateDigitDisplay();
-            resultSection.style.display = 'none';
-        });
-
-        // Analyze button functionality
-        analyzeBtn.addEventListener('click', () => {
-            if (currentDigits.length === 0) {
-                alert('Please select at least one digit!');
+        // Predict button functionality
+        predictBtn.addEventListener('click', () => {
+            // Check if all 6 inputs are filled
+            if (currentValues.filter(val => val !== '').length !== 6) {
+                alert('Please fill all 6 input fields!');
                 return;
             }
 
-            // Show animation
-            showAnimation();
-
             // Simulate processing delay
             setTimeout(() => {
-                // Perform analysis
-                const analysis = performAnalysis(currentDigits);
+                // Perform prediction analysis
+                const prediction = performPrediction(currentValues);
                 
                 // Display result
-                resultDisplay.textContent = analysis.result;
+                resultDisplay.textContent = prediction.result;
                 resultSection.style.display = 'block';
                 
                 // Add to history
-                addToHistory(analysis);
+                addToHistory(prediction);
                 
-                // Hide animation after 2 seconds
+                // Add subtle animation effect
+                resultDisplay.style.animation = 'pulse 1s ease-in-out';
                 setTimeout(() => {
-                    hideAnimation();
-                }, 2000);
-            }, 1500);
+                    resultDisplay.style.animation = '';
+                }, 1000);
+            }, 1000);
         });
 
-        // Update digit display
-        function updateDigitDisplay() {
-            digitInputs.forEach((input, index) => {
-                if (index < currentDigits.length) {
-                    input.querySelector('span').textContent = currentDigits[index];
-                } else {
-                    input.querySelector('span').textContent = '';
-                }
-            });
-        }
-
-        // Perform analysis based on current digits
-        function performAnalysis(digits) {
-            // Create a pattern string from the digits
-            const pattern = digits.join('');
+        // Perform prediction based on current values
+        function performPrediction(values) {
+            // Calculate sum of digits
+            const sum = values.reduce((acc, val) => acc + parseInt(val), 0);
             
-            // Determine if it's big or small based on sum
-            const sum = digits.reduce((acc, digit) => acc + digit, 0);
-            const isBig = sum > 35; // Threshold for big vs small
+            // Determine if it's big or small
+            const isBig = sum > 27; // Threshold for big vs small
             
-            // Generate some patterns and predictions
+            // Generate prediction based on pattern recognition
             const patterns = [
                 "Double Big",
                 "Triple Small",
@@ -535,7 +405,7 @@
             // Randomly select a pattern
             const randomPattern = patterns[Math.floor(Math.random() * patterns.length)];
             
-            // Create prediction based on the analysis
+            // Create prediction
             let prediction;
             if (isBig) {
                 prediction = `BIG (${sum} points) - ${randomPattern}`;
@@ -543,11 +413,11 @@
                 prediction = `SMALL (${sum} points) - ${randomPattern}`;
             }
             
-            // Add more detailed analysis
+            // Add detailed analysis
             const detailedAnalysis = `
-                Analysis of: ${pattern}
+                Analysis of: ${values.join(',')}
                 Sum: ${sum}
-                Average: ${(sum / digits.length).toFixed(2)}
+                Average: ${(sum / 6).toFixed(2)}
                 Trend: ${isBig ? "Upward" : "Downward"}
                 Prediction: ${prediction}
             `;
@@ -558,46 +428,37 @@
             };
         }
 
-        // Add analysis to history
-        function addToHistory(analysis) {
+        // Add prediction to history
+        function addToHistory(prediction) {
             const timestamp = new Date().toLocaleTimeString();
             const historyItem = document.createElement('div');
             historyItem.className = 'history-item';
             historyItem.innerHTML = `
                 <span>${timestamp}</span>
-                <span class="${analysis.result.includes('BIG') ? 'big' : 'small'}">${analysis.result}</span>
+                <span class="${prediction.result.includes('BIG') ? 'big' : 'small'}">${prediction.result}</span>
             `;
             historyList.appendChild(historyItem);
             
-            // Keep only last 10 items
-            if (historyList.children.length > 10) {
+            // Keep only last 5 items
+            if (historyList.children.length > 5) {
                 historyList.removeChild(historyList.firstChild);
             }
         }
 
-        // Show animation
-        function showAnimation() {
-            animationContainer.style.display = 'flex';
-        }
-
-        // Hide animation
-        function hideAnimation() {
-            animationContainer.style.display = 'none';
-        }
-
         // Initialize the app
         window.onload = () => {
-            // Set default values
-            updateDigitDisplay();
+            // Disable predict button initially
+            predictBtn.disabled = true;
         };
 
-        // Handle keyboard input
+        // Add keyboard support
         document.addEventListener('keydown', (e) => {
             if (e.key >= '0' && e.key <= '9') {
-                const digit = parseInt(e.key);
-                const input = Array.from(digitInputs).find(el => el.getAttribute('data-value') == digit);
-                if (input) {
-                    input.click();
+                // Find the next empty input field
+                const emptyInputs = Array.from(inputs).filter(input => input.value === '');
+                if (emptyInputs.length > 0) {
+                    emptyInputs[0].value = e.key;
+                    emptyInputs[0].dispatchEvent(new Event('change'));
                 }
             }
         });
