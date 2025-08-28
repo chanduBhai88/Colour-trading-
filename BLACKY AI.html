@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Colour Prediction Tool</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 25px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-start {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .btn-add {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    .btn-clear {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    #result {
+      margin: 20px 0;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2c3e50;
+      overflow: hidden;
+    }
+
+    .prediction {
+      font-size: 2.5rem;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+
+    .prediction.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .history {
+      margin-top: 30px;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+
+    .history-title {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .history-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .history-item {
+      padding: 8px 0;
+      border-bottom: 1px dashed #eee;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .number {
+      font-weight: bold;
+    }
+
+    .prediction-text {
+      font-weight: bold;
+      color: #e74c3c;
+    }
+
+    .small {
+      color: #27ae60;
+    }
+
+    .big {
+      color: #e74c3c;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Colour Prediction Tool</h1>
+
+    <div class="input-group">
+      <input type="text" id="inputNumber" placeholder="Enter 6-digit number" maxlength="6" />
+      <button class="btn-start" onclick="startPrediction()">Start</button>
+    </div>
+
+    <div class="input-group">
+      <button class="btn-add" onclick="addHistory()">Add</button>
+      <button class="btn-clear" onclick="clearAll()">Clear</button>
+    </div>
+
+    <div id="result">
+      <span class="prediction" id="prediction"></span>
+    </div>
+
+    <div class="history">
+      <h3 class="history-title">Last 10 Predictions</h3>
+      <ul class="history-list" id="historyList"></ul>
+    </div>
+  </div>
+
+  <script>
+    // Prediction Logic Based on Pattern (Example: if sum > 27 -> BIG, else SMALL)
+    function predictBigOrSmall(numStr) {
+      const num = parseInt(numStr);
+      if (isNaN(num) || num < 100000 || num > 999999) {
+        return "Invalid";
+      }
+
+      // Simple logic: Sum of digits to decide Big/Small
+      const sum = num.toString().split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
+
+      return sum > 27 ? "BIG" : "SMALL";
+    }
+
+    function startPrediction() {
+      const input = document.getElementById('inputNumber').value.trim();
+      const resultSpan = document.getElementById('prediction');
+      
+      if (!input) {
+        alert("Please enter a 6-digit number");
+        return;
+      }
+
+      const prediction = predictBigOrSmall(input);
+      resultSpan.textContent = prediction;
+
+      // Animate result
+      resultSpan.classList.remove('show');
+      setTimeout(() => {
+        resultSpan.classList.add('show');
+      }, 100);
+
+      // Apply color and animation
+      resultSpan.style.color = prediction === "BIG" ? "#e74c3c" : "#27ae60";
+      resultSpan.style.fontWeight = "bold";
+
+      // Add to history
+      addHistoryToUI(input, prediction);
+    }
+
+    function addHistory() {
+      const input = document.getElementById('inputNumber').value.trim();
+      if (!input) return;
+
+      const prediction = predictBigOrSmall(input);
+      addHistoryToUI(input, prediction);
+    }
+
+    function addHistoryToUI(number, pred) {
+      const list = document.getElementById('historyList');
+      const item = document.createElement('li');
+      item.className = 'history-item fade-in';
+
+      const numberSpan = document.createElement('span');
+      numberSpan.className = 'number';
+      numberSpan.textContent = number;
+
+      const predSpan = document.createElement('span');
+      predSpan.className = `prediction-text ${pred.toLowerCase()}`;
+      predSpan.textContent = pred;
+
+      item.appendChild(numberSpan);
+      item.appendChild(predSpan);
+
+      list.insertBefore(item, list.firstChild);
+
+      // Limit to 10 items
+      if (list.children.length > 10) {
+        list.removeChild(list.lastChild);
+      }
+
+      // Animate fade-in
+      setTimeout(() => {
+        item.classList.add('visible');
+      }, 50);
+    }
+
+    function clearAll() {
+      document.getElementById('inputNumber').value = '';
+      document.getElementById('prediction').textContent = '';
+      document.getElementById('prediction').classList.remove('show');
+      document.getElementById('historyList').innerHTML = '';
+    }
+  </script>
+</body>
+</html>
